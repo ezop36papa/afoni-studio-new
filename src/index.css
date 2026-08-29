@@ -1,0 +1,59 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;800&family=Geist+Mono:wght@400;500;600;700&display=swap');
+@import 'tailwindcss';
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+:root {
+  --bg: #f5f4f0;
+  --bg-alt: #f0ece4;
+  --bg-dark: #1a1a1a;
+  --text: #1a1a1a;
+  --text-muted: #70706b;
+  --border: rgba(26,26,26,0.24);
+  --border-soft: rgba(26,26,26,0.11);
+  --border-mid: rgba(26,26,26,0.12);
+}
+
+[data-theme="dark"] {
+  --bg: #0d0d0d;
+  --bg-alt: #141414;
+  --bg-dark: #f5f4f0;
+  --text: #f5f4f0;
+  --text-muted: #888880;
+  --border: rgba(245,244,240,0.18);
+  --border-soft: rgba(245,244,240,0.08);
+  --border-mid: rgba(245,244,240,0.10);
+}
+
+.theme-root {
+  background-color: var(--bg);
+  color: var(--text);
+  transition: background-color 0.45s cubic-bezier(0.4,0,0.2,1), color 0.45s cubic-bezier(0.4,0,0.2,1);
+}
+
+.theme-bg       { background-color: var(--bg);     transition: background-color 0.45s cubic-bezier(0.4,0,0.2,1); }
+.theme-bg-alt   { background-color: var(--bg-alt); transition: background-color 0.45s cubic-bezier(0.4,0,0.2,1); }
+.theme-bg-dark  { background-color: var(--bg-dark);transition: background-color 0.45s cubic-bezier(0.4,0,0.2,1); }
+.theme-text     { color: var(--text);    transition: color 0.45s cubic-bezier(0.4,0,0.2,1); }
+.theme-muted    { color: var(--text-muted); transition: color 0.45s cubic-bezier(0.4,0,0.2,1); }
+.theme-border   { border-color: var(--border);     transition: border-color 0.45s cubic-bezier(0.4,0,0.2,1); }
+.theme-border-s { border-color: var(--border-soft);transition: border-color 0.45s cubic-bezier(0.4,0,0.2,1); }
+
+input, textarea {
+  border-color: var(--border);
+  color: var(--text);
+  transition: border-color 0.3s, color 0.45s;
+}
+input::placeholder, textarea::placeholder {
+  color: var(--text-muted);
+  opacity: 0.6;
+}
+
+@theme {
+  --font-outfit: 'Outfit', sans-serif;
+  --font-geist-mono: 'Geist Mono', monospace;
+}
