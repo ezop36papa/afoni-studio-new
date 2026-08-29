@@ -524,18 +524,21 @@ function VideoHero() {
       />
 
       {/* Video — rendered only when a src exists */}
-      {hasSource && !hasError && (
-        <video
-          key={current.src}
-          ref={videoRef}
-          src={current.src ?? undefined}
-          muted={muted}
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover rounded-[2px]"
-          style={{ opacity: transitioning ? 0 : 1, transition: "opacity 0.32s ease" }}
-          onError={() => { setHasError(true); setPlaying(false); }}
-        />
-      )}
+      {!hasError && (
+  <video
+    key="https://files.catbox.moe/n0sbsd.mp4"
+    ref={videoRef}
+    src="https://files.catbox.moe/n0sbsd.mp4"
+    autoPlay
+    loop
+    muted={muted}
+    playsInline
+    className="absolute inset-0 w-full h-full object-cover rounded-[2px]"
+    style={{ opacity: 1 }}
+    onError={() => { setHasError(true); setPlaying(false); }}
+  />
+)}
+
 
       {/* "Awaiting upload" badge — shown when no src or error */}
       {(!hasSource || hasError) && !transitioning && (
