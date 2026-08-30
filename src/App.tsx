@@ -43,6 +43,31 @@ function SubmitSuccess({ plan, onReset }: { plan: string | null; onReset: () => 
     const blink = setInterval(() => setCursor((c) => !c), 530);
     return () => clearInterval(blink);
   }, []);
+    const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setFormStatus('loading');
+
+    try {
+      const response = await fetch('https://hook.eu1.make.com/29jx1bv0yu71y211ep0m85ny0fh4cxn3, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.name,
+          contact: formData.contact,
+          text: formData.description
+        }),
+      });
+
+      if (response.ok) {
+        setFormStatus('success');
+        setFormData({ name: '', contact: '', description: '' });
+      }
+    } catch (error) {
+      setFormStatus('idle');
+      alert('Помилка відправки');
+    }
+  };
+
 
   return (
     <div className="w-full flex flex-col gap-8 py-4">
