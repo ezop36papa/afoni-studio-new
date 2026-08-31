@@ -1418,11 +1418,10 @@ export default function App() {
                   <div className="flex flex-col gap-1.5">
                     <label className="theme-muted font-['Geist_Mono',monospace] font-semibold text-[9px] tracking-[0.5px]">
                       EMAIL ADDRESS
-                    </label>
-                   <input
-  type="email"
-  name="email"
-  value={formData.email}
+  <input
+    type="email"
+    name="email"
+    value={formData.email}
                       onChange={(e) => setFormData((d) => ({ ...d, email: e.target.value }))}
                       placeholder="you@company.com"
                       className={`${inputBase} ${formErrors.email ? "border-red-400" : ""}`}
@@ -1431,8 +1430,6 @@ export default function App() {
                       <span className="font-['Geist_Mono',monospace] text-red-500 text-[9px]">{formErrors.email}</span>
                     )}
                   </div>
-                <form onSubmit={handleSubmit}>
-
                 {/* Brief */}
                 <div className="flex flex-col gap-1.5">
                   <label className="theme-muted font-['Geist_Mono',monospace] font-semibold text-[9px] tracking-[0.5px]">
