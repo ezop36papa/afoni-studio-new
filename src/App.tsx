@@ -1397,59 +1397,52 @@ export default function App() {
              <form onSubmit={handleSubmit} className="flex flex-col gap-5" noValidate>
   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
     {/* Name */}
-    <div className="flex flex-col gap-1.5">
-      <label className="theme-muted font-['Geist_Mono',monospace] font-semibold text-[9px] tracking-[0.5px]">
-        NAME / ORGANIZATION
-      </label>
-      <input
-        type="text"
-        name="name"
-        value={formData.name}
-        onChange={(e) => setFormData((d) => ({ ...d, name: e.target.value }))}
-        placeholder="Your name or company..."
-        className={`${inputBase} ${formErrors.name ? "border-red-400" : ""}`}
-      />
-      {formErrors.name && (
-        <span className="font-['Geist_Mono',monospace] text-red-500 text-[9px]">{formErrors.name}</span>
-      )}
-    </div>
+<div className="flex flex-col gap-1.5">
+  <label className="theme-muted font-['Geist_Mono',monospace] font-semibold text-[9px] tracking-[0.5px]">
+    NAME / ORGANIZATION
+  </label>
+  <input
+    type="text"
+    name="name"
+    placeholder="Your name or company..."
+    className={`${inputBase} ${formErrors.name ? "border-red-400" : ""}`}
+  />
+  {formErrors.name && (
+    <span className="font-['Geist_Mono',monospace] text-red-500 text-[9px]">{formErrors.name}</span>
+  )}
+</div>
 
-    {/* Email */}
-    <div className="flex flex-col gap-1.5">
-      <label className="theme-muted font-['Geist_Mono',monospace] font-semibold text-[9px] tracking-[0.5px]">
-        EMAIL ADDRESS
-      </label>
-      <input
-        type="email"
-        name="email"
-        value={formData.email}
-        onChange={(e) => setFormData((d) => ({ ...d, email: e.target.value }))}
-        placeholder="you@company.com"
-        className={`${inputBase} ${formErrors.email ? "border-red-400" : ""}`}
-      />
-      {formErrors.email && (
-        <span className="font-['Geist_Mono',monospace] text-red-500 text-[9px]">{formErrors.email}</span>
-      )}
-    </div>
-  </div>
+{/* Email */}
+<div className="flex flex-col gap-1.5">
+  <label className="theme-muted font-['Geist_Mono',monospace] font-semibold text-[9px] tracking-[0.5px]">
+    EMAIL ADDRESS
+  </label>
+  <input
+    type="email"
+    name="email"
+    placeholder="you@company.com"
+    className={`${inputBase} ${formErrors.email ? "border-red-400" : ""}`}
+  />
+  {formErrors.email && (
+    <span className="font-['Geist_Mono',monospace] text-red-500 text-[9px]">{formErrors.email}</span>
+  )}
+</div>
 
-  {/* Brief */}
-  <div className="flex flex-col gap-1.5">
-    <label className="theme-muted font-['Geist_Mono',monospace] font-semibold text-[9px] tracking-[0.5px]">
-      PROJECT BRIEF
-    </label>
-    <textarea
-      rows={4}
-      name="brief"
-      value={formData.brief}
-      onChange={(e) => setFormData((d) => ({ ...d, brief: e.target.value }))}
-      placeholder="Describe your concept – product, mood, references, deliverables, deadline..."
-      className={`${inputBase} resize-none ${formErrors.brief ? "border-red-400" : ""}`}
-    />
-    {formErrors.brief && (
-      <span className="font-['Geist_Mono',monospace] text-red-500 text-[9px]">{formErrors.brief}</span>
-    )}
-  </div>
+{/* Brief */}
+<div className="flex flex-col gap-1.5">
+  <label className="theme-muted font-['Geist_Mono',monospace] font-semibold text-[9px] tracking-[0.5px]">
+    PROJECT BRIEF
+  </label>
+  <textarea
+    rows={4}
+    name="brief"
+    placeholder="Describe your concept – product, mood, references, deliverables, deadline..."
+    className={`${inputBase} resize-none ${formErrors.brief ? "border-red-400" : ""}`}
+  />
+  {formErrors.brief && (
+    <span className="font-['Geist_Mono',monospace] text-red-500 text-[9px]">{formErrors.brief}</span>
+  )}
+</div>
 
   <div className="flex flex-col items-center gap-2 pt-1">
     <button
