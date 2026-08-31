@@ -48,10 +48,9 @@ function SubmitSuccess({ plan, onReset }: { plan: string | null; onReset: () => 
   e.preventDefault();
 
   const form = e.target;
-  const name = form.elements.namedItem('name')?.value || form.querySelector('input[type="text"]')?.value || '';
-  const contact = form.elements.namedItem('email')?.value || form.elements.namedItem('contact')?.value || form.querySelector('input[type="email"], input[type="tel"]')?.value || '';
-  const text = form.elements.namedItem('brief')?.value || form.elements.namedItem('description')?.value || form.querySelector('textarea')?.value || '';
-
+  const name = form.querySelector('input[name="name"]')?.value || '';
+  const contact = form.querySelector('input[name="email"], input[name="contact"]')?.value || '';
+  const text = form.querySelector('textarea[name="brief"], textarea[name="description"]')?.value || '';
   fetch('https://hook.eu1.make.com/29jx1bv0yu71y21lep0m85ny0fh4cxn3', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
