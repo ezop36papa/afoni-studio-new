@@ -1394,74 +1394,76 @@ export default function App() {
                 }}
               />
             ) : (
-              <form onSubmit={handleSubmit} className="flex flex-col gap-5" noValidate>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                  {/* Name */}
-                  <div className="flex flex-col gap-1.5">
-                    <label className="theme-muted font-['Geist_Mono',monospace] font-semibold text-[9px] tracking-[0.5px]">
-                      NAME / ORGANIZATION
-                    </label>
-                   <input
-  type="text"
-  name="name"
-  value={formData.name}
-                      onChange={(e) => setFormData((d) => ({ ...d, name: e.target.value }))}
-                      placeholder="Your name or company..."
-                      className={`${inputBase} ${formErrors.name ? "border-red-400" : ""}`}
-                    />
-                    {formErrors.name && (
-                      <span className="font-['Geist_Mono',monospace] text-red-500 text-[9px]">{formErrors.name}</span>
-                    )}
-                  </div>
+             <form onSubmit={handleSubmit} className="flex flex-col gap-5" noValidate>
+  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+    {/* Name */}
+    <div className="flex flex-col gap-1.5">
+      <label className="theme-muted font-['Geist_Mono',monospace] font-semibold text-[9px] tracking-[0.5px]">
+        NAME / ORGANIZATION
+      </label>
+      <input
+        type="text"
+        name="name"
+        value={formData.name}
+        onChange={(e) => setFormData((d) => ({ ...d, name: e.target.value }))}
+        placeholder="Your name or company..."
+        className={`${inputBase} ${formErrors.name ? "border-red-400" : ""}`}
+      />
+      {formErrors.name && (
+        <span className="font-['Geist_Mono',monospace] text-red-500 text-[9px]">{formErrors.name}</span>
+      )}
+    </div>
 
-                {/* Email */}
-<div className="flex flex-col gap-1.5">
-  <label className="theme-muted font-['Geist_Mono',monospace] font-semibold text-[9px] tracking-[0.5px]">
-    EMAIL ADDRESS
-  </label>
-  <input
-    type="email"
-    name="email"
-    value={formData.email}
-    onChange={(e) => setFormData((d) => ({ ...d, email: e.target.value }))}
-    placeholder="you@company.com"
-    className={`${inputBase} ${formErrors.email ? "border-red-400" : ""}`}
-  />
-  {formErrors.email && (
-    <span className="font-['Geist_Mono',monospace] text-red-500 text-[9px]">{formErrors.email}</span>
-  )}
-</div>
-                {/* Brief */}
-                <div className="flex flex-col gap-1.5">
-                  <label className="theme-muted font-['Geist_Mono',monospace] font-semibold text-[9px] tracking-[0.5px]">
-                    PROJECT BRIEF
-                  </label>
-                 <textarea
-  rows={4}
-  name="brief"
-  value={formData.brief}
-  onChange={(e) => setFormData((d) => ({ ...d, brief: e.target.value }))}
-                    placeholder="Describe your concept — product, mood, references, deliverables, deadline..."
-                    className={`${inputBase} resize-none ${formErrors.brief ? "border-red-400" : ""}`}
-                  />
-                  {formErrors.brief && (
-                    <span className="font-['Geist_Mono',monospace] text-red-500 text-[9px]">{formErrors.brief}</span>
-                  )}
-                </div>
+    {/* Email */}
+    <div className="flex flex-col gap-1.5">
+      <label className="theme-muted font-['Geist_Mono',monospace] font-semibold text-[9px] tracking-[0.5px]">
+        EMAIL ADDRESS
+      </label>
+      <input
+        type="email"
+        name="email"
+        value={formData.email}
+        onChange={(e) => setFormData((d) => ({ ...d, email: e.target.value }))}
+        placeholder="you@company.com"
+        className={`${inputBase} ${formErrors.email ? "border-red-400" : ""}`}
+      />
+      {formErrors.email && (
+        <span className="font-['Geist_Mono',monospace] text-red-500 text-[9px]">{formErrors.email}</span>
+      )}
+    </div>
+  </div>
 
-                <div className="flex flex-col items-center gap-2 pt-1">
-                  <button
-                    type="submit"
-                    disabled={formState === "sending"}
-                    className="w-full bg-[#ff4800] text-[#0d0d0d] font-['Geist_Mono',monospace] font-bold text-[14px] tracking-[1px] px-10 py-5 rounded-[2px] cursor-pointer hover:bg-[#e03e00] disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.97] transition-all shadow-[0_4px_24px_rgba(255,72,0,0.35)] hover:shadow-[0_6px_32px_rgba(255,72,0,0.5)]"
-                  >
-                    {formState === "sending" ? "SENDING..." : "INITIATE_PROJECT →"}
-                  </button>
-                  <span className="font-['Geist_Mono',monospace] text-[#70706b] text-[9px]">
-                    No commitment required.
-                  </span>
-                </div>
-              </form>
+  {/* Brief */}
+  <div className="flex flex-col gap-1.5">
+    <label className="theme-muted font-['Geist_Mono',monospace] font-semibold text-[9px] tracking-[0.5px]">
+      PROJECT BRIEF
+    </label>
+    <textarea
+      rows={4}
+      name="brief"
+      value={formData.brief}
+      onChange={(e) => setFormData((d) => ({ ...d, brief: e.target.value }))}
+      placeholder="Describe your concept – product, mood, references, deliverables, deadline..."
+      className={`${inputBase} resize-none ${formErrors.brief ? "border-red-400" : ""}`}
+    />
+    {formErrors.brief && (
+      <span className="font-['Geist_Mono',monospace] text-red-500 text-[9px]">{formErrors.brief}</span>
+    )}
+  </div>
+
+  <div className="flex flex-col items-center gap-2 pt-1">
+    <button
+      type="submit"
+      disabled={formState === "sending"}
+      className="w-full bg-[#ff4800] text-[#0d0d0d] font-['Geist_Mono',monospace] font-bold text-[14px] tracking-[1px] px-10 py-5 rounded-[2px] cursor-pointer hover:bg-[#e03e00] disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.97] transition-all shadow-[0_4px_24px_rgba(255,72,0,0.25)]"
+    >
+      {formState === "sending" ? "SENDING..." : "INITIATE_PROJECT →"}
+    </button>
+    <span className="font-['Geist_Mono',monospace] text-[#70706b] text-[9px]">
+      No commitment required.
+    </span>
+  </div>
+</form>
             )}
           </div>
         </div>
