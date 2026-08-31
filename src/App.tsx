@@ -1393,23 +1393,33 @@ export default function App() {
                 }}
               />
             ) : (
-             <form onSubmit={(e: any) => {
+            <form onSubmit={(e: any) => {
   e.preventDefault();
   const form = e.target;
   const name = form.elements.namedItem('name')?.value || '';
   const email = form.elements.namedItem('email')?.value || '';
   const brief = form.elements.namedItem('brief')?.value || '';
 
-  fetch('https://hook.eu1.make.com/29jx1bv0yu71y21lep0m85ny0fh4cxn3', {
+  const payload = { name, email, contact: email, brief, text: brief };
+  console.log('Sending payload:', payload);
+
+  fetch('ТВОЄ_ПОСИЛАННЯ_НА_ВЕБХУК', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ name, contact: email, text: brief }),
+    body: JSON.stringify(payload),
   })
-  .then(() => {
+  .then(response => {
+    console.log('Response status:', response.status);
+    if (!response.ok) {
+      throw new Error(`Server returned status ${response.status}`);
+    }
     alert('Заявку успішно відправлено!');
     form.reset();
   })
-  .catch(() => alert('Помилка відправки'));
+  .catch(err => {
+    console.error('Fetch error:', err);
+    alert('Помилка відправки: ' + err.message);
+  });
 }} className="flex flex-col gap-5">
   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
     <div className="flex flex-col gap-1.5">
