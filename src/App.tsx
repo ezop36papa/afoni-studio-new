@@ -1402,7 +1402,7 @@ export default function App() {
       </label>
       <input
         type="text"
-        name="name"
+        name="contact"
         placeholder="Your name or company..."
         className={`${inputBase} ${formErrors.name ? "border-red-400" : ""}`}
       />
@@ -1418,7 +1418,7 @@ export default function App() {
       </label>
       <input
         type="email"
-        name="email"
+        name="contact"
         placeholder="you@company.com"
         className={`${inputBase} ${formErrors.email ? "border-red-400" : ""}`}
       />
@@ -1435,7 +1435,7 @@ export default function App() {
     </label>
     <textarea
       rows={4}
-      name="brief"
+      name="description"
       placeholder="Describe your concept – product, mood, references, deliverables, deadline..."
       className={`${inputBase} resize-none ${formErrors.brief ? "border-red-400" : ""}`}
     />
