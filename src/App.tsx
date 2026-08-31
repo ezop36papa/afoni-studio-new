@@ -44,25 +44,25 @@ function SubmitSuccess({ plan, onReset }: { plan: string | null; onReset: () => 
     return () => clearInterval(blink);
   }, []);
 
-   const handleSubmit = (e: any) => {
-    e.preventDefault();
+  const handleSubmit = (e: any) => {
+  e.preventDefault();
 
-    const form = e.target;
-    const name = form.elements.namedItem('name')?.value || form.querySelector('input[type="text"]')?.value || '';
-    const contact = form.elements.namedItem('contact')?.value || form.querySelector('input[type="email"], input[type="tel"]')?.value || '';
-    const text = form.elements.namedItem('description')?.value || form.querySelector('textarea')?.value || '';
+  const form = e.target;
+  const name = form.elements.namedItem('name')?.value || form.querySelector('input[type="text"]')?.value || '';
+  const contact = form.elements.namedItem('email')?.value || form.elements.namedItem('contact')?.value || form.querySelector('input[type="email"], input[type="tel"]')?.value || '';
+  const text = form.elements.namedItem('brief')?.value || form.elements.namedItem('description')?.value || form.querySelector('textarea')?.value || '';
 
-    fetch('https://hook.eu1.make.com/29jx1bv0yu71y211ep0m85ny0fh4cxn3', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, contact, text }),
-    })
-      .then(() => {
-        alert('Заявку успішно відправлено!');
-        form.reset();
-      })
-      .catch(() => alert('Помилка відправки'));
-  };
+  fetch('https://hook.eu1.make.com/29jx1bv0yu71y21lep0m85ny0fh4cxn3', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, contact, text }),
+  })
+  .then(() => {
+    alert('Заявку успішно відправлено!');
+    form.reset();
+  })
+  .catch(() => alert('Помилка відправки'));
+};
 
 
   
