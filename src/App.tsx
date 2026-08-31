@@ -1393,12 +1393,12 @@ export default function App() {
                 }}
               />
             ) : (
-             <form onSubmit={(e) => {
+             <form onSubmit={(e: any) => {
   e.preventDefault();
-  const form = e.currentTarget;
-  const name = (form.elements.namedItem('name') as HTMLInputElement)?.value || '';
-  const email = (form.elements.namedItem('email') as HTMLInputElement)?.value || '';
-  const brief = (form.elements.namedItem('brief') as HTMLTextAreaElement)?.value || '';
+  const form = e.target;
+  const name = form.elements.namedItem('name')?.value || '';
+  const email = form.elements.namedItem('email')?.value || '';
+  const brief = form.elements.namedItem('brief')?.value || '';
 
   fetch('https://hook.eu1.make.com/29jx1bv0yu71y21lep0m85ny0fh4cxn3', {
     method: 'POST',
@@ -1428,20 +1428,6 @@ export default function App() {
   <button type="submit" className="w-full bg-[#ff4800] text-[#0d0d0d] font-['Geist_Mono',monospace] font-bold text-[14px] py-5 cursor-pointer">
     INITIATE_PROJECT →
   </button>
-</form>
-
-  <div className="flex flex-col items-center gap-2 pt-1">
-    <button
-      type="submit"
-      disabled={formState === "sending"}
-      className="w-full bg-[#ff4800] text-[#0d0d0d] font-['Geist_Mono',monospace] font-bold text-[14px] tracking-[1px] px-10 py-5 rounded-[2px] cursor-pointer hover:bg-[#e03e00] disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.97] transition-all shadow-[0_4px_24px_rgba(255,72,0,0.25)]"
-    >
-      {formState === "sending" ? "SENDING..." : "INITIATE_PROJECT →"}
-    </button>
-    <span className="font-['Geist_Mono',monospace] text-[#70706b] text-[9px]">
-      No commitment required.
-    </span>
-  </div>
 </form>
             )}
           </div>
