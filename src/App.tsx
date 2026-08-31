@@ -1401,9 +1401,10 @@ export default function App() {
                     <label className="theme-muted font-['Geist_Mono',monospace] font-semibold text-[9px] tracking-[0.5px]">
                       NAME / ORGANIZATION
                     </label>
-                    <input
-                      type="text"
-                      value={formData.name}
+                   <input
+  type="text"
+  name="name"
+  value={formData.name}
                       onChange={(e) => setFormData((d) => ({ ...d, name: e.target.value }))}
                       placeholder="Your name or company..."
                       className={`${inputBase} ${formErrors.name ? "border-red-400" : ""}`}
@@ -1418,9 +1419,10 @@ export default function App() {
                     <label className="theme-muted font-['Geist_Mono',monospace] font-semibold text-[9px] tracking-[0.5px]">
                       EMAIL ADDRESS
                     </label>
-                    <input
-                      type="email"
-                      value={formData.email}
+                   <input
+  type="email"
+  name="email"
+  value={formData.email}
                       onChange={(e) => setFormData((d) => ({ ...d, email: e.target.value }))}
                       placeholder="you@company.com"
                       className={`${inputBase} ${formErrors.email ? "border-red-400" : ""}`}
@@ -1429,17 +1431,18 @@ export default function App() {
                       <span className="font-['Geist_Mono',monospace] text-red-500 text-[9px]">{formErrors.email}</span>
                     )}
                   </div>
-                </div>
+                <form onSubmit={handleSubmit}>
 
                 {/* Brief */}
                 <div className="flex flex-col gap-1.5">
                   <label className="theme-muted font-['Geist_Mono',monospace] font-semibold text-[9px] tracking-[0.5px]">
                     PROJECT BRIEF
                   </label>
-                  <textarea
-                    rows={4}
-                    value={formData.brief}
-                    onChange={(e) => setFormData((d) => ({ ...d, brief: e.target.value }))}
+                 <textarea
+  rows={4}
+  name="brief"
+  value={formData.brief}
+  onChange={(e) => setFormData((d) => ({ ...d, brief: e.target.value }))}
                     placeholder="Describe your concept — product, mood, references, deliverables, deadline..."
                     className={`${inputBase} resize-none ${formErrors.brief ? "border-red-400" : ""}`}
                   />
