@@ -43,30 +43,41 @@ function SubmitSuccess({ plan, onReset }: { plan: string | null; onReset: () => 
     const blink = setInterval(() => setCursor((c) => !c), 530);
     return () => clearInterval(blink);
   }, []);
-    const handleSubmit = async (e: React.FormEvent) => {
+
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
-    setFormStatus('loading');
+    
+    if (typeof setFormStatus === 'function') setFormStatus('loading');
 
     try {
-      const response = await fetch('https://hook.eu1.make.com/29jx1bv0yu71y211ep0m85ny0fh4cxn3, {
+      const response = await fetch('https://hook.eu1.make.com/29jx1bv0yu71y211ep0m85ny0fh4cxn3', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({
-          name: formData.name,
-          contact: formData.contact,
-          text: formData.description
+          name: (formData as any)?.name || '',
+          contact: (formData as any)?.contact || '',
+          text: (formData as any)?.description || ''
         }),
       });
 
       if (response.ok) {
-        setFormStatus('success');
-        setFormData({ name: '', contact: '', description: '' });
+        if (typeof setFormStatus === 'function') setFormStatus('success');
+        if (typeof setFormData === 'function') setFormData({ name: '', contact: '', description: '' });
+      } else {
+        if (typeof setFormStatus === 'function') setFormStatus('idle');
+        alert('Помилка відправки. Спробуйте ще раз.');
       }
     } catch (error) {
-      setFormStatus('idle');
-      alert('Помилка відправки');
+      console.error('Submit error:', error);
+      if (typeof setFormStatus === 'function') setFormStatus('idle');
+      alert('Помилка з\'єднання. Перевірте інтернет.');
     }
   };
+
+  return (
+
 
 
   return (
