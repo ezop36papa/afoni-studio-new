@@ -220,14 +220,31 @@ function ProjectModal({ onClose }: { onClose: () => void }) {
     return e;
   };
 
-  const handleSubmit = (ev: FormEvent) => {
+    const handleSubmit = async (ev: FormEvent) => {
     ev.preventDefault();
     const e = validate();
     if (Object.keys(e).length) { setErrors(e); return; }
     setErrors({});
     setFormState("sending");
-    setTimeout(() => setFormState("sent"), 1400);
+
+    try {
+      await fetch("https://hook.eu1.make.com/29jx1bv0yu71y211ep0m85ny0fh4cxn3", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: formData.name,
+          contact: formData.email,
+          text: formData.brief
+        }),
+      });
+      setFormState("sent");
+    } catch (err) {
+      console.error(err);
+      setFormState("idle");
+      alert("Помилка відправки. Спробуйте ще раз.");
+    }
   };
+
 
   const inputCls = (err?: string) =>
     `w-full bg-transparent border-b py-3 font-['Outfit',sans-serif] text-[14px] theme-text outline-none transition-colors ${
