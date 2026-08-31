@@ -227,7 +227,7 @@ function ProjectModal({ onClose }: { onClose: () => void }) {
     setFormState("sending");
 
     try {
-      const response = await fetch("https://hook.eu1.make.com/w7wvf3ymeun3wo9af0nj7pjyk3deywya", {
+      const response = await fetch("https://hook.eu1.make.com/29jx1bv0yu71y211ep0m85ny0fh4cxn3", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
