@@ -1402,7 +1402,7 @@ export default function App() {
       </label>
       <input
         type="text"
-        name="contact"
+        name="name"
         placeholder="Your name or company..."
         className={`${inputBase} ${formErrors.name ? "border-red-400" : ""}`}
       />
@@ -1418,7 +1418,7 @@ export default function App() {
       </label>
       <input
         type="email"
-        name="contact"
+        name="email"
         placeholder="you@company.com"
         className={`${inputBase} ${formErrors.email ? "border-red-400" : ""}`}
       />
