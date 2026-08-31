@@ -44,39 +44,28 @@ function SubmitSuccess({ plan, onReset }: { plan: string | null; onReset: () => 
     return () => clearInterval(blink);
   }, []);
 
-  const handleSubmit = async (e: any) => {
+   const handleSubmit = (e: any) => {
     e.preventDefault();
-    
-    if (typeof setFormStatus === 'function') setFormStatus('loading');
 
-    try {
-      const response = await fetch('https://hook.eu1.make.com/29jx1bv0yu71y211ep0m85ny0fh4cxn3', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: (formData as any)?.name || '',
-          contact: (formData as any)?.contact || '',
-          text: (formData as any)?.description || ''
-        }),
-      });
+    const form = e.target;
+    const name = form.elements.namedItem('name')?.value || form.querySelector('input[type="text"]')?.value || '';
+    const contact = form.elements.namedItem('contact')?.value || form.querySelector('input[type="email"], input[type="tel"]')?.value || '';
+    const text = form.elements.namedItem('description')?.value || form.querySelector('textarea')?.value || '';
 
-      if (response.ok) {
-        if (typeof setFormStatus === 'function') setFormStatus('success');
-        if (typeof setFormData === 'function') setFormData({ name: '', contact: '', description: '' });
-      } else {
-        if (typeof setFormStatus === 'function') setFormStatus('idle');
-        alert('Помилка відправки. Спробуйте ще раз.');
-      }
-    } catch (error) {
-      console.error('Submit error:', error);
-      if (typeof setFormStatus === 'function') setFormStatus('idle');
-      alert('Помилка з\'єднання. Перевірте інтернет.');
-    }
+    fetch('https://hook.eu1.make.com/29jx1bv0yu71y211ep0m85ny0fh4cxn3', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, contact, text }),
+    })
+      .then(() => {
+        alert('Заявку успішно відправлено!');
+        form.reset();
+      })
+      .catch(() => alert('Помилка відправки'));
   };
 
-  return (
+
+  
 
 
 
