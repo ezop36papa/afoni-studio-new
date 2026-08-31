@@ -1414,22 +1414,23 @@ export default function App() {
                     )}
                   </div>
 
-                  {/* Email */}
-                  <div className="flex flex-col gap-1.5">
-                    <label className="theme-muted font-['Geist_Mono',monospace] font-semibold text-[9px] tracking-[0.5px]">
-                      EMAIL ADDRESS
+                {/* Email */}
+<div className="flex flex-col gap-1.5">
+  <label className="theme-muted font-['Geist_Mono',monospace] font-semibold text-[9px] tracking-[0.5px]">
+    EMAIL ADDRESS
+  </label>
   <input
     type="email"
     name="email"
     value={formData.email}
-                      onChange={(e) => setFormData((d) => ({ ...d, email: e.target.value }))}
-                      placeholder="you@company.com"
-                      className={`${inputBase} ${formErrors.email ? "border-red-400" : ""}`}
-                    />
-                    {formErrors.email && (
-                      <span className="font-['Geist_Mono',monospace] text-red-500 text-[9px]">{formErrors.email}</span>
-                    )}
-                  </div>
+    onChange={(e) => setFormData((d) => ({ ...d, email: e.target.value }))}
+    placeholder="you@company.com"
+    className={`${inputBase} ${formErrors.email ? "border-red-400" : ""}`}
+  />
+  {formErrors.email && (
+    <span className="font-['Geist_Mono',monospace] text-red-500 text-[9px]">{formErrors.email}</span>
+  )}
+</div>
                 {/* Brief */}
                 <div className="flex flex-col gap-1.5">
                   <label className="theme-muted font-['Geist_Mono',monospace] font-semibold text-[9px] tracking-[0.5px]">
