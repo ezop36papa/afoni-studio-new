@@ -51,7 +51,7 @@ function SubmitSuccess({ plan, onReset }: { plan: string | null; onReset: () => 
   const name = form.elements.namedItem('name')?.value || '';
   const contact = form.elements.namedItem('email')?.value || form.elements.namedItem('contact')?.value || '';
   const text = form.elements.namedItem('brief')?.value || form.elements.namedItem('description')?.value || '';
-  fetch('https://hook.eu1.make.com/w7wvf3ymeun3wo9af0nj7pjyk3deywya, {
+  fetch('https://hook.eu1.make.com/w7wvf3ymeun3wo9af0nj7pjyk3deywya', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ name, contact, text }),
