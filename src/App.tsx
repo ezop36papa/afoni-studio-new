@@ -286,22 +286,8 @@ function ProjectModal({ onClose }: { onClose: () => void }) {
         {/* Body */}
         <div className="px-8 py-8 flex flex-col gap-5">
           {formState === "sent" ? (
-            <div className="flex flex-col items-center gap-4 py-8 text-center">
-              <div className="bg-[#ff4800] rounded-full p-4">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                  <path d="M4 12l5 5L20 7" stroke="#0d0d0d" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </div>
-              <p className="font-['Outfit',sans-serif] font-extrabold theme-text text-[22px]">Brief received. We're on it.</p>
-              <p className="font-['Geist_Mono',monospace] theme-muted text-[10px]">RESPONSE WINDOW // &lt;24H — CHECK YOUR INBOX</p>
-              <button
-                onClick={onClose}
-                className="mt-2 font-['Geist_Mono',monospace] text-[#ff4800] text-[11px] border border-[#ff4800] px-6 py-3 rounded-[2px] hover:bg-[#ff4800] hover:text-[#0d0d0d] transition-all"
-              >
-                [ CLOSE × ]
-              </button>
-            </div>
-          ) : (
+  <SubmitSuccess plan={null} onReset={onClose} />
+) : ({formState === "sent" ? (
             <form onSubmit={handleSubmit} className="flex flex-col gap-5" noValidate>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div className="flex flex-col gap-1.5">
