@@ -452,7 +452,7 @@ function GalleryCard({ src, code, index, title, height = 280 }: { src: string; c
 // Replace src values with your own video URLs or local /assets/*.mp4 files
 const VIDEOS = [
   {
-    src: null,
+    src: "https://files.catbox.moe/n0sbsd.mp4",
     poster: imgHero,
     label: "CAMPAIGN_001",
     meta: "CAM: HASSELBLAD H6D-100C",
@@ -517,7 +517,7 @@ function VideoHero() {
   useEffect(() => {
     const v = videoRef.current;
     if (!v || !hasSource) return;
-    v.currentTime = 0;
+    v.currentTime = 0.6;
     setPlaying(false);
   }, [index]);
 
@@ -558,11 +558,11 @@ function VideoHero() {
       />
 
       {/* Video — rendered only when a src exists */}
-      {!hasError && (
+      {hasSource && !hasError && (
   <video
-    key="https://files.catbox.moe/n0sbsd.mp4"
+    key={current.src}
     ref={videoRef}
-    src="https://files.catbox.moe/n0sbsd.mp4"
+    src={current.src}
     autoPlay
     loop
     muted={muted}
