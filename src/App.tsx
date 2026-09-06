@@ -287,7 +287,7 @@ function ProjectModal({ onClose }: { onClose: () => void }) {
         <div className="px-8 py-8 flex flex-col gap-5">
           {formState === "sent" ? (
   <SubmitSuccess plan={null} onReset={onClose} />
-) : ({formState === "sent" ? (
+) : (
             <form onSubmit={handleSubmit} className="flex flex-col gap-5" noValidate>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div className="flex flex-col gap-1.5">
