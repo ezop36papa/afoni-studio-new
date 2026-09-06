@@ -693,7 +693,10 @@ function ServiceCard({ num, type, title, desc, features, isSelected, justAdded, 
       </div>
       <div className="theme-border h-px w-full border-t" />
       <div className="flex flex-col gap-4 flex-1">
-        
+              <p className="theme-muted font-['Outfit',sans-serif] text-[14px] leading-[21px]">{desc}</p>
+        <div className="flex flex-col gap-2">
+          {features.map((f) => (
+            <div key={f} className="flex gap-2.5 items-center">  
               <div className="rounded-[2px] size-1 shrink-0 bg-[#ff4800]" />
               <span className="theme-text font-['Geist_Mono',monospace] text-[10px]">{f}</span>
             </div>
