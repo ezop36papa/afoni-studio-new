@@ -1420,8 +1420,9 @@ export default function App() {
     if (!response.ok) {
       throw new Error(`Server returned status ${response.status}`);
     }
-    alert('Заявку успішно відправлено!');
-    form.reset();
+   form.reset();
+setFormState("sent");
+setActiveStep(3);
   })
   .catch(err => {
     console.error('Fetch error:', err);
