@@ -1410,7 +1410,7 @@ export default function App() {
   const payload = { name, email, contact: email, brief, text: brief };
   console.log('Sending payload:', payload);
 
-  fetch('ТВОЄ_ПОСИЛАННЯ_НА_ВЕБХУК', {
+  fetch('https://hook.eu1.make.com/29jx1bv0yu71y211ep0m85ny0fh4cxn3', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
