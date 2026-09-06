@@ -590,61 +590,7 @@ function VideoHero() {
       {/* Dark overlay */}
       <div className="absolute inset-0 bg-black/30 rounded-[2px]" />
 
-      {/* Corner markers */}
-      <div className="absolute top-2 left-2 w-3 h-3 border-l border-t border-white/60" />
-      <div className="absolute top-2 right-2 w-3 h-3 border-r border-t border-white/60" />
-      <div className="absolute bottom-[48px] left-2 w-3 h-3 border-l border-b border-white/60" />
-      <div className="absolute bottom-[48px] right-2 w-3 h-3 border-r border-b border-white/60" />
-
-      {/* Top bar */}
-      <div className="absolute top-4 left-4 right-4 flex items-start justify-between">
-        <div className="bg-[rgba(26,26,26,0.8)] border border-white/20 px-2 py-1 rounded-[2px]">
-          <span className="font-['Geist_Mono',monospace] text-white text-[9px]">[{current.state}]</span>
-        </div>
-        <div className="flex gap-3 items-center">
-          {/* Slide counter */}
-          <div className="bg-[rgba(26,26,26,0.7)] border border-white/10 px-2 py-1 rounded-[2px] flex gap-1.5 items-center">
-            {VIDEOS.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => goTo(i)}
-                className={`rounded-full transition-all ${
-                  i === index ? "bg-[#ff4800] w-4 h-1.5" : "bg-white/40 size-1.5 hover:bg-white/70"
-                }`}
-              />
-            ))}
-          </div>
-          <span className="font-['Geist_Mono',monospace] text-[#ff4d00] text-[10px]">{current.label}</span>
-        </div>
-      </div>
-
-      {/* Prev / Next arrows */}
-      <button
-        onClick={prev}
-        className="absolute left-4 top-1/2 -translate-y-1/2 bg-[rgba(26,26,26,0.7)] border border-white/20 rounded-[2px] w-9 h-9 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-[#ff4800] hover:border-[#ff4800]"
-      >
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-          <path d="M9 2L4 7l5 5" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
-      </button>
-      <button
-        onClick={next}
-        className="absolute right-4 top-1/2 -translate-y-1/2 bg-[rgba(26,26,26,0.7)] border border-white/20 rounded-[2px] w-9 h-9 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-[#ff4800] hover:border-[#ff4800]"
-      >
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-          <path d="M5 2l5 5-5 5" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
-      </button>
-
-      {/* Bottom meta */}
-      <div className="absolute bottom-[48px] left-4 right-4 flex items-end justify-between pb-2">
-        <div className="flex flex-col gap-0.5">
-          <span className="font-['Geist_Mono',monospace] font-semibold text-white text-[11px]">{current.meta}</span>
-          <span className="font-['Geist_Mono',monospace] text-white/70 text-[9px]">{current.optics}</span>
-        </div>
-        <span className="font-['Geist_Mono',monospace] text-white text-[10px]">{current.coord}</span>
-      </div>
-
+     
       {/* Controls bar */}
       <div className="absolute bottom-0 left-0 right-0 bg-[rgba(13,13,13,0.85)] border-t border-white/10 px-4 h-[44px] flex items-center gap-3">
         {/* Play/Pause */}
@@ -747,10 +693,7 @@ function ServiceCard({ num, type, title, desc, features, isSelected, justAdded, 
       </div>
       <div className="theme-border h-px w-full border-t" />
       <div className="flex flex-col gap-4 flex-1">
-        <p className="theme-muted font-['Outfit',sans-serif] text-[14px] leading-[21px]">{desc}</p>
-        <div className="flex flex-col gap-2">
-          {features.map((f) => (
-            <div key={f} className="flex gap-2.5 items-center">
+        
               <div className="rounded-[2px] size-1 shrink-0 bg-[#ff4800]" />
               <span className="theme-text font-['Geist_Mono',monospace] text-[10px]">{f}</span>
             </div>
