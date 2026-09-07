@@ -639,10 +639,7 @@ function VideoHero() {
           )}
         </button>
 
-        {/* Index label */}
-        <span className="font-['Geist_Mono',monospace] text-white/40 text-[9px] shrink-0 hidden sm:block">
-          {String(index + 1).padStart(2, "0")} / {String(VIDEOS.length).padStart(2, "0")}
-        </span>
+       
       </div>
     </div>
   );
