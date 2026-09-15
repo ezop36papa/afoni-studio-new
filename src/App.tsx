@@ -6,7 +6,15 @@ async function submitToMakeWebhook(data: { name: string; email: string; brief: s
   const res = await fetch(MAKE_WEBHOOK_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
+    // Send both field-name conventions (email/brief and contact/text) so the
+    // Make scenario picks up the right ones regardless of which it expects.
+    body: JSON.stringify({
+      name: data.name,
+      email: data.email,
+      contact: data.email,
+      brief: data.brief,
+      text: data.brief,
+    }),
   });
   if (!res.ok) throw new Error(`Webhook responded with ${res.status}`);
 }
