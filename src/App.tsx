@@ -44,30 +44,6 @@ function SubmitSuccess({ plan, onReset }: { plan: string | null; onReset: () => 
     return () => clearInterval(blink);
   }, []);
 
-  const handleSubmit = (e: any) => {
-  e.preventDefault();
-
-  const form = e.target;
-  const name = form.elements.namedItem('name')?.value || '';
-  const contact = form.elements.namedItem('email')?.value || form.elements.namedItem('contact')?.value || '';
-  const text = form.elements.namedItem('brief')?.value || form.elements.namedItem('description')?.value || '';
-  fetch('https://hook.eu1.make.com/w7wvf3ymeun3wo9af0nj7pjyk3deywya', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ name, contact, text }),
-  })
-  .then(() => {
-    alert('Заявку успішно відправлено!');
-    form.reset();
-  })
-  .catch(() => alert('Помилка відправки'));
-};
-
-
-  
-
-
-
   return (
     <div className="w-full flex flex-col gap-8 py-4">
       {/* Terminal window */}
@@ -195,6 +171,139 @@ function Lightbox({ src, code, onClose }: { src: string; code: string; onClose: 
   );
 }
 
+/* ── Legal Modal ── */
+type LegalPage = "impressum" | "datenschutz" | "agb" | null;
+
+const LEGAL_CONTENT: Record<NonNullable<LegalPage>, { title: string; body: React.ReactNode }> = {
+  impressum: {
+    title: "Impressum",
+    body: (
+      <div className="flex flex-col gap-4 font-['Outfit',sans-serif] text-[14px] leading-[22px]">
+        <div>
+          <p className="font-bold mb-1">Angaben gemäß § 5 TMG</p>
+          <p>AFONI Studio<br />Musterstraße 12<br />10115 Berlin<br />Deutschland</p>
+        </div>
+        <div>
+          <p className="font-bold mb-1">Kontakt</p>
+          <p>E-Mail: hello@afoni.studio<br />Web: www.afoni.studio</p>
+        </div>
+        <div>
+          <p className="font-bold mb-1">Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV</p>
+          <p>AFONI Studio, Musterstraße 12, 10115 Berlin</p>
+        </div>
+        <div>
+          <p className="font-bold mb-1">Haftungsausschluss</p>
+          <p>Die Inhalte dieser Website wurden mit größter Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte können wir jedoch keine Gewähr übernehmen.</p>
+        </div>
+        <div>
+          <p className="font-bold mb-1">Urheberrecht</p>
+          <p>Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechtes bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers.</p>
+        </div>
+      </div>
+    ),
+  },
+  datenschutz: {
+    title: "Datenschutzerklärung",
+    body: (
+      <div className="flex flex-col gap-4 font-['Outfit',sans-serif] text-[14px] leading-[22px]">
+        <div>
+          <p className="font-bold mb-1">1. Datenschutz auf einen Blick</p>
+          <p>Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit Ihren personenbezogenen Daten passiert, wenn Sie diese Website besuchen. Personenbezogene Daten sind alle Daten, mit denen Sie persönlich identifiziert werden können.</p>
+        </div>
+        <div>
+          <p className="font-bold mb-1">2. Verantwortliche Stelle</p>
+          <p>Verantwortlich für die Datenverarbeitung auf dieser Website ist:<br />AFONI Studio, Musterstraße 12, 10115 Berlin<br />E-Mail: hello@afoni.studio</p>
+        </div>
+        <div>
+          <p className="font-bold mb-1">3. Datenerfassung auf dieser Website</p>
+          <p>Wenn Sie uns per Kontaktformular Anfragen zukommen lassen, werden Ihre Angaben aus dem Anfrageformular inklusive der von Ihnen dort angegebenen Kontaktdaten zwecks Bearbeitung der Anfrage und für den Fall von Anschlussfragen bei uns gespeichert. Diese Daten geben wir nicht ohne Ihre Einwilligung weiter.</p>
+        </div>
+        <div>
+          <p className="font-bold mb-1">4. Ihre Rechte</p>
+          <p>Sie haben jederzeit das Recht, unentgeltlich Auskunft über Herkunft, Empfänger und Zweck Ihrer gespeicherten personenbezogenen Daten zu erhalten. Sie haben außerdem ein Recht, die Berichtigung oder Löschung dieser Daten zu verlangen. Hierzu sowie zu weiteren Fragen zum Thema Datenschutz können Sie sich jederzeit unter der im Impressum angegebenen Adresse an uns wenden.</p>
+        </div>
+        <div>
+          <p className="font-bold mb-1">5. Rechtsgrundlage</p>
+          <p>Die Verarbeitung erfolgt auf Grundlage von Art. 6 Abs. 1 lit. b DSGVO (Vertragserfüllung) und Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse). Sie können der Verarbeitung jederzeit widersprechen.</p>
+        </div>
+      </div>
+    ),
+  },
+  agb: {
+    title: "Allgemeine Geschäftsbedingungen (AGB)",
+    body: (
+      <div className="flex flex-col gap-4 font-['Outfit',sans-serif] text-[14px] leading-[22px]">
+        <div>
+          <p className="font-bold mb-1">§ 1 Geltungsbereich</p>
+          <p>Diese Allgemeinen Geschäftsbedingungen gelten für alle Leistungen von AFONI Studio (nachfolgend „Auftragnehmer") gegenüber Unternehmern im Sinne des § 14 BGB (nachfolgend „Auftraggeber").</p>
+        </div>
+        <div>
+          <p className="font-bold mb-1">§ 2 Vertragsschluss</p>
+          <p>Ein Vertrag kommt erst durch die schriftliche Auftragsbestätigung des Auftragnehmers zustande. Angebote sind freibleibend und unverbindlich.</p>
+        </div>
+        <div>
+          <p className="font-bold mb-1">§ 3 Leistungsumfang</p>
+          <p>Der Leistungsumfang ergibt sich aus der schriftlichen Auftragsbestätigung. Änderungen und Erweiterungen des Leistungsumfangs bedürfen der schriftlichen Vereinbarung. Zusätzliche Leistungen werden gesondert berechnet.</p>
+        </div>
+        <div>
+          <p className="font-bold mb-1">§ 4 Vergütung und Zahlung</p>
+          <p>Die vereinbarte Vergütung ist nach Rechnungsstellung innerhalb von 14 Tagen ohne Abzug fällig. Bei Zahlungsverzug ist der Auftragnehmer berechtigt, Verzugszinsen in Höhe von 9 Prozentpunkten über dem jeweiligen Basiszinssatz zu berechnen.</p>
+        </div>
+        <div>
+          <p className="font-bold mb-1">§ 5 Urheberrecht und Nutzungsrechte</p>
+          <p>Alle erstellten Werke sind urheberrechtlich geschützt. Die Nutzungsrechte gehen erst nach vollständiger Bezahlung auf den Auftraggeber über. Der Auftragnehmer behält das Recht, die erstellten Werke in seinem Portfolio zu veröffentlichen.</p>
+        </div>
+        <div>
+          <p className="font-bold mb-1">§ 6 Gewährleistung</p>
+          <p>Der Auftraggeber ist verpflichtet, die erbrachten Leistungen unverzüglich zu prüfen und Mängel schriftlich anzuzeigen. Die Gewährleistungsfrist beträgt 12 Monate ab Abnahme.</p>
+        </div>
+        <div>
+          <p className="font-bold mb-1">§ 7 Anwendbares Recht</p>
+          <p>Es gilt deutsches Recht unter Ausschluss des UN-Kaufrechts. Gerichtsstand ist Berlin.</p>
+        </div>
+      </div>
+    ),
+  },
+};
+
+function LegalModal({ page, onClose }: { page: NonNullable<LegalPage>; onClose: () => void }) {
+  const { title, body } = LEGAL_CONTENT[page];
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", onKey);
+    return () => { document.body.style.overflow = ""; window.removeEventListener("keydown", onKey); };
+  }, [onClose]);
+
+  return (
+    <div
+      className="fixed inset-0 z-[300] flex items-center justify-center p-4"
+      style={{ background: "rgba(13,13,13,0.8)", backdropFilter: "blur(6px)" }}
+      onClick={onClose}
+    >
+      <div
+        className="theme-bg w-full max-w-[680px] max-h-[82vh] rounded-[2px] overflow-hidden shadow-[0_24px_80px_rgba(0,0,0,0.5)] flex flex-col"
+        onClick={(e) => e.stopPropagation()}
+        style={{ animation: "modalIn 0.28s cubic-bezier(0.34,1.2,0.64,1)" }}
+      >
+        <div className="bg-[#1a1a1a] px-6 py-4 flex items-center justify-between shrink-0">
+          <div className="flex items-center gap-3">
+            <div className="bg-[#ff4800] w-1 h-4 rounded-full" />
+            <span className="font-['Outfit',sans-serif] font-extrabold text-white text-[16px]">{title}</span>
+          </div>
+          <button
+            onClick={onClose}
+            className="font-['Geist_Mono',monospace] text-white/40 text-[11px] hover:text-[#ff4800] transition-colors tracking-[0.5px]"
+          >
+            [ ESC / CLOSE × ]
+          </button>
+        </div>
+        <div className="overflow-y-auto px-8 py-8 theme-text">{body}</div>
+      </div>
+    </div>
+  );
+}
+
 /* ── Project form modal ── */
 function ProjectModal({ onClose }: { onClose: () => void }) {
   const [formState, setFormState] = useState<"idle" | "sending" | "sent">("idle");
@@ -219,38 +328,14 @@ function ProjectModal({ onClose }: { onClose: () => void }) {
     return e;
   };
 
-    const handleSubmit = async (ev: FormEvent) => {
+  const handleSubmit = (ev: FormEvent) => {
     ev.preventDefault();
     const e = validate();
     if (Object.keys(e).length) { setErrors(e); return; }
     setErrors({});
     setFormState("sending");
-
-    try {
-      const response = await fetch("https://hook.eu1.make.com/29jx1bv0yu71y211ep0m85ny0fh4cxn3", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: formData.name,
-          contact: formData.email,
-          text: formData.brief
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Server returned status ${response.status}`);
-      }
-
-      setFormState("sent");
-    } catch (err: any) {
-      console.error(err);
-      setFormState("idle");
-      alert("Помилка відправки: " + (err.message || "Спробуйте ще раз."));
-    }
+    setTimeout(() => setFormState("sent"), 1400);
   };
-   
-       
-
 
   const inputCls = (err?: string) =>
     `w-full bg-transparent border-b py-3 font-['Outfit',sans-serif] text-[14px] theme-text outline-none transition-colors ${
@@ -286,8 +371,8 @@ function ProjectModal({ onClose }: { onClose: () => void }) {
         {/* Body */}
         <div className="px-8 py-8 flex flex-col gap-5">
           {formState === "sent" ? (
-  <SubmitSuccess plan={null} onReset={onClose} />
-) : (
+            <SubmitSuccess plan={null} onReset={onClose} />
+          ) : (
             <form onSubmit={handleSubmit} className="flex flex-col gap-5" noValidate>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div className="flex flex-col gap-1.5">
@@ -452,7 +537,7 @@ function GalleryCard({ src, code, index, title, height = 280 }: { src: string; c
 // Replace src values with your own video URLs or local /assets/*.mp4 files
 const VIDEOS = [
   {
-    src: "https://files.catbox.moe/n0sbsd.mp4",
+    src: null,
     poster: imgHero,
     label: "CAMPAIGN_001",
     meta: "CAM: HASSELBLAD H6D-100C",
@@ -482,15 +567,16 @@ const VIDEOS = [
 
 function VideoHero() {
   const [index, setIndex] = useState(0);
-  const [playing, setPlaying] = useState(false);
+  const [playing, setPlaying] = useState(true);
   const [muted, setMuted] = useState(true);
+  const [volume, setVolume] = useState(0.8);
   const [progress, setProgress] = useState(0);
   const [transitioning, setTransitioning] = useState(false);
   const [hasError, setHasError] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const current = VIDEOS[index];
-  const hasSource = !!current.src;
+  const hasSource = true;
 
   const goTo = (next: number) => {
     if (transitioning) return;
@@ -510,14 +596,22 @@ function VideoHero() {
   const togglePlay = () => {
     const v = videoRef.current;
     if (!v || !hasSource || hasError) return;
-    playing ? v.pause() : v.play().catch(() => setHasError(true));
+    if (playing) {
+      v.pause();
+      v.volume = 0;
+      setMuted(true);
+    } else {
+      v.play().catch(() => setHasError(true));
+      v.volume = volume;
+      setMuted(false);
+    }
     setPlaying(!playing);
   };
 
   useEffect(() => {
     const v = videoRef.current;
     if (!v || !hasSource) return;
-    v.currentTime = 0.6;
+    v.currentTime = 0;
     setPlaying(false);
   }, [index]);
 
@@ -537,11 +631,25 @@ function VideoHero() {
     };
   }, [index]);
 
-  const seekTo = (e: ReactMouseEvent<HTMLDivElement>) => {
+  useEffect(() => {
     const v = videoRef.current;
-    if (!v || !hasSource || hasError) return;
-    const rect = e.currentTarget.getBoundingClientRect();
-    v.currentTime = ((e.clientX - rect.left) / rect.width) * v.duration;
+    if (!v) return;
+    v.volume = muted ? 0 : volume;
+  }, [volume, muted]);
+
+  const handleVolumeChange = (val: number) => {
+    setVolume(val);
+    if (val === 0) setMuted(true);
+    else setMuted(false);
+    const v = videoRef.current;
+    if (v) v.volume = val;
+  };
+
+  const toggleMute = () => {
+    const next = !muted;
+    setMuted(next);
+    const v = videoRef.current;
+    if (v) v.volume = next ? 0 : volume;
   };
 
   return (
@@ -558,11 +666,11 @@ function VideoHero() {
       />
 
       {/* Video — rendered only when a src exists */}
-      {hasSource && !hasError && (
+      {!hasError && (
   <video
-    key={current.src}
+    key="https://files.catbox.moe/n0sbsd.mp4"
     ref={videoRef}
-    src={current.src}
+    src="https://files.catbox.moe/n0sbsd.mp4"
     autoPlay
     loop
     muted={muted}
@@ -574,7 +682,10 @@ function VideoHero() {
 )}
 
 
-      {/* "Awaiting upload" badge — shown when no src or error */}
+      {/* Dark overlay */}
+      <div className="absolute inset-0 bg-black/25 rounded-[2px]" />
+
+      {/* Awaiting badge */}
       {(!hasSource || hasError) && !transitioning && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
           <div className="bg-[rgba(13,13,13,0.65)] border border-white/15 rounded-[2px] px-4 py-2 flex items-center gap-2">
@@ -587,13 +698,9 @@ function VideoHero() {
         </div>
       )}
 
-      {/* Dark overlay */}
-      <div className="absolute inset-0 bg-black/30 rounded-[2px]" />
-
-     
-      {/* Controls bar */}
-      <div className="absolute bottom-0 left-0 right-0 bg-[rgba(13,13,13,0.85)] border-t border-white/10 px-4 h-[44px] flex items-center gap-3">
-        {/* Play/Pause */}
+      {/* Controls bar — play/pause + volume */}
+      <div className="absolute bottom-0 left-0 right-0 bg-[rgba(13,13,13,0.9)] border-t border-white/10 px-4 h-[44px] flex items-center gap-3">
+        {/* Play / Pause */}
         <button
           onClick={togglePlay}
           className="flex items-center justify-center size-7 rounded-[2px] border border-white/20 hover:border-[#ff4800] transition-colors shrink-0"
@@ -610,36 +717,40 @@ function VideoHero() {
           )}
         </button>
 
-        {/* Progress bar */}
-        <div
-          className="flex-1 h-[3px] bg-white/20 rounded-full cursor-pointer relative"
-          onClick={seekTo}
-        >
-          <div
-            className="absolute left-0 top-0 h-full bg-[#ff4800] rounded-full transition-none"
-            style={{ width: `${progress * 100}%` }}
-          />
-        </div>
-
-        {/* Mute */}
+        {/* Mute toggle */}
         <button
-          onClick={() => setMuted((m) => !m)}
+          onClick={toggleMute}
           className="flex items-center justify-center size-7 rounded-[2px] border border-white/20 hover:border-[#ff4800] transition-colors shrink-0"
         >
-          {muted ? (
+          {muted || volume === 0 ? (
             <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-              <path d="M2 4H4.5L7.5 1.5v9L4.5 8H2V4Z" stroke="white/50" fill="rgba(255,255,255,0.3)" strokeWidth="0.8"/>
+              <path d="M2 4H4.5L7.5 1.5v9L4.5 8H2V4Z" stroke="rgba(255,255,255,0.45)" fill="rgba(255,255,255,0.2)" strokeWidth="0.8"/>
               <path d="M9 4.5l2 3M11 4.5l-2 3" stroke="white" strokeWidth="1.2" strokeLinecap="round"/>
             </svg>
           ) : (
             <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-              <path d="M2 4H4.5L7.5 1.5v9L4.5 8H2V4Z" stroke="white" fill="rgba(255,255,255,0.3)" strokeWidth="0.8"/>
+              <path d="M2 4H4.5L7.5 1.5v9L4.5 8H2V4Z" stroke="white" fill="rgba(255,255,255,0.25)" strokeWidth="0.8"/>
               <path d="M9.5 4.5c.8.5 1.2 1.2 1.2 1.5s-.4 1-.8 1.5" stroke="white" strokeWidth="1.2" strokeLinecap="round"/>
             </svg>
           )}
         </button>
 
-       
+        {/* Volume slider */}
+        <div className="flex items-center gap-2 flex-1 max-w-[120px]">
+          <input
+            type="range"
+            min={0}
+            max={1}
+            step={0.01}
+            value={muted ? 0 : volume}
+            onChange={(e) => handleVolumeChange(parseFloat(e.target.value))}
+            className="w-full h-[3px] rounded-full appearance-none cursor-pointer"
+            style={{
+              background: `linear-gradient(to right, #ff4800 ${(muted ? 0 : volume) * 100}%, rgba(255,255,255,0.2) ${(muted ? 0 : volume) * 100}%)`,
+              accentColor: "#ff4800",
+            }}
+          />
+        </div>
       </div>
     </div>
   );
@@ -690,10 +801,10 @@ function ServiceCard({ num, type, title, desc, features, isSelected, justAdded, 
       </div>
       <div className="theme-border h-px w-full border-t" />
       <div className="flex flex-col gap-4 flex-1">
-              <p className="theme-muted font-['Outfit',sans-serif] text-[14px] leading-[21px]">{desc}</p>
+        <p className="theme-muted font-['Outfit',sans-serif] text-[14px] leading-[21px]">{desc}</p>
         <div className="flex flex-col gap-2">
           {features.map((f) => (
-            <div key={f} className="flex gap-2.5 items-center">  
+            <div key={f} className="flex gap-2.5 items-center">
               <div className="rounded-[2px] size-1 shrink-0 bg-[#ff4800]" />
               <span className="theme-text font-['Geist_Mono',monospace] text-[10px]">{f}</span>
             </div>
@@ -709,6 +820,41 @@ function ServiceCard({ num, type, title, desc, features, isSelected, justAdded, 
           {isSelected ? "[ REMOVE − ]" : "[ ENQUIRE → ]"}
         </button>
       </div>
+    </div>
+  );
+}
+
+/* ── Format card with parallax ── */
+function FormatCard({ num, title, desc, type, isSelected, onToggle }: {
+  num: string; title: string; desc: string; type?: string; isSelected: boolean; onToggle: () => void;
+}) {
+  const { ref, style: tiltStyle, onMouseMove, onMouseLeave } = useParallaxTilt();
+  return (
+    <div
+      ref={ref}
+      onMouseMove={onMouseMove}
+      onMouseLeave={onMouseLeave}
+      onClick={onToggle}
+      style={{
+        ...tiltStyle,
+        boxShadow: isSelected ? "0 0 0 2px #ff4800" : undefined,
+      }}
+      className="theme-bg-alt theme-border-s border rounded-[2px] px-6 py-6 flex flex-col gap-4 cursor-pointer transition-shadow duration-200"
+    >
+      <div className="flex flex-col gap-2">
+        <div className="flex items-center justify-between">
+          <span className="font-['Geist_Mono',monospace] text-[#ff4800] font-bold text-[13px]">{num}</span>
+          {type && <span className="font-['Geist_Mono',monospace] theme-muted text-[9px]">{type}</span>}
+        </div>
+        <h3 className="theme-text font-['Outfit',sans-serif] font-extrabold text-[18px] leading-tight">{title}</h3>
+      </div>
+      <p className="theme-muted font-['Outfit',sans-serif] text-[13px] leading-[20px] flex-1">{desc}</p>
+      <button
+        onClick={(e) => { e.stopPropagation(); onToggle(); }}
+        className="font-['Geist_Mono',monospace] text-[#ff4800] text-[11px] tracking-[0.5px] self-end border border-[#ff4800]/40 px-3 py-1.5 rounded-[2px] hover:bg-[#ff4800] hover:text-[#0d0d0d] transition-all"
+      >
+        {isSelected ? "[ SELECTED ✓ ]" : "[ ENQUIRE → ]"}
+      </button>
     </div>
   );
 }
@@ -778,6 +924,7 @@ export default function App() {
   const [formData, setFormData] = useState({ name: "", email: "", brief: "" });
   const [formErrors, setFormErrors] = useState<{ name?: string; email?: string; brief?: string }>({});
   const [activeStep, setActiveStep] = useState(0);
+  const [legalPage, setLegalPage] = useState<LegalPage>(null);
 
   const refAbout = useRef<HTMLElement>(null);
   const refService = useRef<HTMLElement>(null);
@@ -1040,75 +1187,43 @@ export default function App() {
         </div>
       </section>
 
-      {/* Services Section */}
-      <section ref={refService as React.RefObject<HTMLDivElement>} className="theme-border border-b flex flex-col gap-10 items-start px-6 md:px-12 py-16 max-w-[1440px] mx-auto w-full">
-        <div className="flex items-center justify-between w-full">
-          <div className="flex items-center gap-4">
-            <span className="theme-text font-['Geist_Mono',monospace] font-bold text-[12px]">SERVICE FORMATS //</span>
-            {selectedPlan && (
-              <span className="font-['Geist_Mono',monospace] text-[10px] text-[#ff4800] animate-pulse">
-                [{selectedPlan} — ADDED TO CLIENT PROFILE]
-              </span>
-            )}
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
+      {/* Testimonials Section */}
+      <section className="theme-border border-b max-w-[1440px] mx-auto w-full px-6 md:px-12 py-14 flex flex-col gap-8">
+        <span className="theme-text font-['Geist_Mono',monospace] font-bold text-[10px] tracking-widest">WHAT CLIENTS SAY //</span>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {[
             {
-              num: "[01]",
-              type: "ENGAGEMENT_TYPE_A",
-              title: "SINGLE PROJECT",
-              desc: "One-off campaign or production. Fixed scope, fixed deliverables. Ideal for product launches, seasonal editorials, and brand shoots.",
-              features: ["Defined brief + deliverables", "2 rounds of revision", "48-72hr turnaround"],
-              priceLabel: "STARTING FROM",
-              price: "$5,000",
-              priceSuffix: "",
+              initials: "AR",
+              name: "Amina Rosa",
+              role: "Creative Director, London",
+              quote: "\"AFONI delivered a campaign that felt premium, modern, and completely on-brand. The team moved fast and the final assets were incredibly polished.\"",
             },
             {
-              num: "[02]",
-              type: "ENGAGEMENT_TYPE_B",
-              title: "RETAINER",
-              desc: "Ongoing visual production partnership. Monthly allocation of renders, revisions, and dedicated art direction hours. Maximum consistency, maximum velocity.",
-              features: ["Monthly render allocation", "Dedicated art director", "Priority 24hr turnaround"],
-              priceLabel: "STARTING FROM",
-              price: "$12,000",
-              priceSuffix: "/mo",
+              initials: "JK",
+              name: "Jules Kim",
+              role: "Brand Lead, Barcelona",
+              quote: "\"The retainer model gave us consistent quality and fast turnaround. AFONI understood our brand language from day one.\"",
             },
             {
-              num: "[03]",
-              type: "ENGAGEMENT_TYPE_C",
-              title: "ENTERPRISE",
-              desc: "Full-spectrum AI visual pipeline integration. Custom model training, brand-locked generation, and a dedicated art director embedded in your workflow.",
-              features: ["Custom model training", "Brand-locked generation", "Embedded art director"],
-              priceLabel: "PRICING",
-              price: "CUSTOM",
-              priceSuffix: "",
+              initials: "SR",
+              name: "Sofia Rivas",
+              role: "Product Marketing, Paris",
+              quote: "\"The final deliverables were stunning. AFONI balanced art direction with production efficiency — exactly what we needed for launch.\"",
             },
-          ].map(({ num, type, title, desc, features, priceLabel, price, priceSuffix }) => {
-            const isSelected = selectedPlan === title;
-            const justAdded = addedPlan === title;
-
-            const handleAdd = () => {
-              if (isSelected) {
-                setSelectedPlan(null);
-                setAddedPlan(null);
-                return;
-              }
-              setSelectedPlan(title);
-              setAddedPlan(title);
-              setTimeout(() => setAddedPlan(null), 1800);
-              scrollTo(sectionRefs.contact);
-            };
-
-            return (
-              <ServiceCard
-                key={num}
-                num={num} type={type} title={title} desc={desc} features={features}
-                isSelected={isSelected} justAdded={justAdded} onAdd={handleAdd}
-              />
-            );
-          })}
+          ].map(({ initials, name, role, quote }) => (
+            <div key={name} className="theme-bg-alt theme-border-s border rounded-[2px] px-6 py-6 flex flex-col gap-6">
+              <p className="theme-text font-['Outfit',sans-serif] text-[13px] leading-[20px] flex-1">{quote}</p>
+              <div className="flex items-center gap-3">
+                <div className="size-8 rounded-full bg-[#ff4800]/15 border border-[#ff4800]/30 flex items-center justify-center shrink-0">
+                  <span className="font-['Geist_Mono',monospace] text-[#ff4800] text-[9px] font-bold">{initials}</span>
+                </div>
+                <div className="flex flex-col gap-0.5">
+                  <span className="theme-text font-['Outfit',sans-serif] font-extrabold text-[12px] leading-tight">{name}</span>
+                  <span className="theme-muted font-['Geist_Mono',monospace] text-[9px]">{role}</span>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 
@@ -1151,22 +1266,61 @@ export default function App() {
         ref={refContact as React.RefObject<HTMLDivElement>}
         className="theme-border border-b flex flex-col gap-0 max-w-[1440px] mx-auto w-full"
       >
-        {/* Section header — full width accent bar */}
-        <div className="bg-[#1a1a1a] px-6 md:px-12 py-5 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div className="bg-[#ff4800] w-1 h-5 rounded-full" />
+        {/* Section header — full width orange accent bar */}
+        <div className="bg-[#ff4800] px-6 md:px-12 py-5 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="bg-white/40 w-[3px] h-5 rounded-full" />
             <span className="font-['Outfit',sans-serif] font-extrabold text-white text-[22px] tracking-tight">
               Start a Project
             </span>
-            <span className="font-['Geist_Mono',monospace] text-white/30 text-[10px] hidden md:block">// INTAKE PROTOCOL</span>
+            <span className="font-['Geist_Mono',monospace] text-white/50 text-[10px] hidden md:block">// INTAKE PROTOCOL</span>
           </div>
           <div className="flex gap-1.5 items-center">
-            <div className="bg-[#22c55e] opacity-70 rounded-full size-[6px]" />
-            <span className="font-['Geist_Mono',monospace] text-white/50 text-[9px]">SYS://READY</span>
+            <div className="bg-white opacity-70 rounded-full size-[6px]" />
+            <span className="font-['Geist_Mono',monospace] text-white/70 text-[9px]">SYS://READY</span>
           </div>
         </div>
 
-        <div className="flex flex-col lg:flex-row w-full">
+        {/* SERVICE FORMATS — inside contact section */}
+        <div
+          ref={refService as React.RefObject<HTMLDivElement>}
+          className="px-6 md:px-12 py-10 flex flex-col gap-8 theme-border border-b"
+        >
+          <div className="flex items-center gap-4">
+            <span className="theme-text font-['Geist_Mono',monospace] font-bold text-[11px] tracking-widest">SERVICE FORMATS //</span>
+            {selectedPlan && (
+              <span className="font-['Geist_Mono',monospace] text-[10px] text-[#ff4800] animate-pulse">
+                [{selectedPlan} — ADDED]
+              </span>
+            )}
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4" style={{ perspective: "1200px" }}>
+            {[
+              { num: "[01]", title: "SINGLE PROJECT", desc: "A focused visual project, from concept to final delivery.", type: "ENGAGEMENT_A" },
+              { num: "[02]", title: "RETAINER",       desc: "Ongoing visual production for brands and creative teams.", type: "ENGAGEMENT_B" },
+              { num: "[03]", title: "CUSTOM",         desc: "A tailored approach for larger or more specific projects.", type: "ENGAGEMENT_C" },
+            ].map(({ num, title, desc, type }) => (
+              <FormatCard
+                key={num}
+                num={num}
+                title={title}
+                desc={desc}
+                type={type}
+                isSelected={selectedPlan === title}
+                onToggle={() => {
+                  if (selectedPlan === title) { setSelectedPlan(null); setAddedPlan(null); return; }
+                  setSelectedPlan(title);
+                  setAddedPlan(title);
+                  setTimeout(() => setAddedPlan(null), 1800);
+                }}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* HOW IT WORKS + Form — bordered container */}
+        <div className="px-6 md:px-12 py-8">
+          <div className="theme-border border rounded-[2px] overflow-hidden flex flex-col lg:flex-row w-full">
 
           {/* LEFT — How it works sidebar */}
           <div className="theme-bg-alt theme-border-s border-r px-8 py-10 flex flex-col gap-6 lg:w-[300px] shrink-0 relative overflow-hidden">
@@ -1329,81 +1483,118 @@ export default function App() {
                 }}
               />
             ) : (
-            <form onSubmit={(e: any) => {
-  e.preventDefault();
-  const form = e.target;
-  const name = form.elements.namedItem('name')?.value || '';
-  const email = form.elements.namedItem('email')?.value || '';
-  const brief = form.elements.namedItem('brief')?.value || '';
+              <form onSubmit={handleSubmit} className="flex flex-col gap-5" noValidate>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  {/* Name */}
+                  <div className="flex flex-col gap-1.5">
+                    <label className="theme-muted font-['Geist_Mono',monospace] font-semibold text-[9px] tracking-[0.5px]">
+                      NAME / ORGANIZATION
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.name}
+                      onChange={(e) => setFormData((d) => ({ ...d, name: e.target.value }))}
+                      placeholder="Your name or company..."
+                      className={`${inputBase} ${formErrors.name ? "border-red-400" : ""}`}
+                    />
+                    {formErrors.name && (
+                      <span className="font-['Geist_Mono',monospace] text-red-500 text-[9px]">{formErrors.name}</span>
+                    )}
+                  </div>
 
-  const payload = { name, email, contact: email, brief, text: brief };
-  console.log('Sending payload:', payload);
+                  {/* Email */}
+                  <div className="flex flex-col gap-1.5">
+                    <label className="theme-muted font-['Geist_Mono',monospace] font-semibold text-[9px] tracking-[0.5px]">
+                      EMAIL ADDRESS
+                    </label>
+                    <input
+                      type="email"
+                      value={formData.email}
+                      onChange={(e) => setFormData((d) => ({ ...d, email: e.target.value }))}
+                      placeholder="you@company.com"
+                      className={`${inputBase} ${formErrors.email ? "border-red-400" : ""}`}
+                    />
+                    {formErrors.email && (
+                      <span className="font-['Geist_Mono',monospace] text-red-500 text-[9px]">{formErrors.email}</span>
+                    )}
+                  </div>
+                </div>
 
-  fetch('https://hook.eu1.make.com/29jx1bv0yu71y211ep0m85ny0fh4cxn3', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload),
-  })
-  .then(response => {
-    console.log('Response status:', response.status);
-    if (!response.ok) {
-      throw new Error(`Server returned status ${response.status}`);
-    }
-   form.reset();
-setFormState("sent");
-setActiveStep(3);
-  })
-  .catch(err => {
-    console.error('Fetch error:', err);
-    alert('Помилка відправки: ' + err.message);
-  });
-}} className="flex flex-col gap-5">
-  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-    <div className="flex flex-col gap-1.5">
-      <label className="theme-muted font-['Geist_Mono',monospace] font-semibold text-[9px] tracking-[0.5px]">NAME / ORGANIZATION</label>
-      <input type="text" name="name" placeholder="Your name or company..." className={inputBase} />
-    </div>
-    <div className="flex flex-col gap-1.5">
-      <label className="theme-muted font-['Geist_Mono',monospace] font-semibold text-[9px] tracking-[0.5px]">EMAIL ADDRESS</label>
-      <input type="email" name="email" placeholder="you@company.com" className={inputBase} />
-    </div>
-  </div>
-  <div className="flex flex-col gap-1.5">
-    <label className="theme-muted font-['Geist_Mono',monospace] font-semibold text-[9px] tracking-[0.5px]">PROJECT BRIEF</label>
-    <textarea rows={4} name="brief" placeholder="Describe your concept — product, mood, references, deliverables, deadline..." className={`${inputBase} resize-none`} />
-  </div>
-  <button type="submit" className="w-full bg-[#ff4800] text-[#0d0d0d] font-['Geist_Mono',monospace] font-bold text-[14px] py-5 cursor-pointer">
-    INITIATE_PROJECT →
-  </button>
-</form>
+                {/* Brief */}
+                <div className="flex flex-col gap-1.5">
+                  <label className="theme-muted font-['Geist_Mono',monospace] font-semibold text-[9px] tracking-[0.5px]">
+                    PROJECT BRIEF
+                  </label>
+                  <textarea
+                    rows={4}
+                    value={formData.brief}
+                    onChange={(e) => setFormData((d) => ({ ...d, brief: e.target.value }))}
+                    placeholder="Describe your concept — product, mood, references, deliverables, deadline..."
+                    className={`${inputBase} resize-none ${formErrors.brief ? "border-red-400" : ""}`}
+                  />
+                  {formErrors.brief && (
+                    <span className="font-['Geist_Mono',monospace] text-red-500 text-[9px]">{formErrors.brief}</span>
+                  )}
+                </div>
+
+                <div className="flex flex-col items-center gap-2 pt-1">
+                  <button
+                    type="submit"
+                    disabled={formState === "sending"}
+                    className="w-full bg-[#ff4800] text-[#0d0d0d] font-['Geist_Mono',monospace] font-bold text-[14px] tracking-[1px] px-10 py-5 rounded-[2px] cursor-pointer hover:bg-[#e03e00] disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.97] transition-all shadow-[0_4px_24px_rgba(255,72,0,0.35)] hover:shadow-[0_6px_32px_rgba(255,72,0,0.5)]"
+                  >
+                    {formState === "sending" ? "SENDING..." : "INITIATE_PROJECT →"}
+                  </button>
+                  <span className="font-['Geist_Mono',monospace] text-[#70706b] text-[9px]">
+                    No commitment required.
+                  </span>
+                </div>
+              </form>
             )}
           </div>
-        </div>
+        </div>{/* end bordered container + flex row */}
+        </div>{/* end px wrapper */}
       </section>
 
       {/* Footer */}
-      <footer className="flex items-center justify-between px-6 md:px-12 py-6 max-w-[1440px] mx-auto w-full">
-        <span className="theme-text font-['Geist_Mono',monospace] text-[11px]">
-          © 2026 AFONI STUDIO // ALL RIGHTS RESERVED.
-        </span>
-        <nav className="flex gap-5 items-center">
-          {[
-            { label: "INSTAGRAM", href: "https://www.instagram.com/afoni.studio/" },
-            { label: "BEHANCE", href: "https://behance.net" },
-            { label: "LINKEDIN", href: "https://www.linkedin.com/company/afoni-studio/?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAcGRvZgJleHRuA2FlbQIxMQBzcnRjBmFwcF9pZA85MzY2MTk3NDMzOTI0NTkAAacAkygec980oHuNR6DPMqNJg0o-oIEsPqAWj4q1tLr8J-jR-M8VS8QCwIkm0Q_aem_b4-9vhrSDfwjviBrjWsgHw" },
-          ].map(({ label, href }) => (
-            <a
-              key={label}
-              href={href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="theme-text font-['Geist_Mono',monospace] font-medium text-[11px] hover:text-[#ff4800] transition-colors"
+      <footer className="theme-border border-t flex flex-col gap-4 px-6 md:px-12 py-6 max-w-[1440px] mx-auto w-full">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <span className="theme-text font-['Geist_Mono',monospace] text-[11px]">
+            © 2026 AFONI STUDIO // ALL RIGHTS RESERVED.
+          </span>
+          <nav className="flex gap-5 items-center flex-wrap">
+            {[
+              { label: "INSTAGRAM", href: "https://www.instagram.com/afoni.studio/" },
+              { label: "BEHANCE", href: "https://behance.net" },
+              { label: "LINKEDIN", href: "https://www.linkedin.com/company/afoni-studio/?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAcGRvZgJleHRuA2FlbQIxMQBzcnRjBmFwcF9pZA85MzY2MTk3NDMzOTI0NTkAAacAkygec980oHuNR6DPMqNJg0o-oIEsPqAWj4q1tLr8J-jR-M8VS8QCwIkm0Q_aem_b4-9vhrSDfwjviBrjWsgHw" },
+            ].map(({ label, href }) => (
+              <a
+                key={label}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="theme-text font-['Geist_Mono',monospace] font-medium text-[11px] hover:text-[#ff4800] transition-colors"
+              >
+                {label}
+              </a>
+            ))}
+          </nav>
+        </div>
+        {/* German legal links */}
+        <div className="theme-border-s border-t pt-4 flex gap-5 flex-wrap">
+          {(["impressum", "datenschutz", "agb"] as const).map((key) => (
+            <button
+              key={key}
+              onClick={() => setLegalPage(key)}
+              className="theme-muted font-['Geist_Mono',monospace] text-[10px] hover:text-[#ff4800] transition-colors tracking-[0.3px]"
             >
-              {label}
-            </a>
+              {key === "impressum" ? "IMPRESSUM" : key === "datenschutz" ? "DATENSCHUTZERKLÄRUNG" : "AGB"}
+            </button>
           ))}
-        </nav>
+        </div>
       </footer>
+
+      {legalPage && <LegalModal page={legalPage} onClose={() => setLegalPage(null)} />}
     </div>
   );
 }

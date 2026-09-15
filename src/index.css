@@ -43,6 +43,23 @@ body,
 .theme-border   { border-color: var(--border);     transition: border-color 0.45s cubic-bezier(0.4,0,0.2,1); }
 .theme-border-s { border-color: var(--border-soft);transition: border-color 0.45s cubic-bezier(0.4,0,0.2,1); }
 
+input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #ff4800;
+  cursor: pointer;
+}
+input[type="range"]::-moz-range-thumb {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #ff4800;
+  border: none;
+  cursor: pointer;
+}
+
 input, textarea {
   border-color: var(--border);
   color: var(--text);
