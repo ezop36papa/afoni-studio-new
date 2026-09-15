@@ -1056,7 +1056,6 @@ const HOW_IT_WORKS = [
 
 export default function App() {
   const [darkMode, setDarkMode] = useState(false);
-  const [showAllWorks, setShowAllWorks] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
@@ -1288,12 +1287,6 @@ export default function App() {
           {/* Gallery label row */}
           <div className="theme-border-s flex items-center justify-between pt-2 border-t">
             <span className="theme-text font-['Geist_Mono',monospace] font-bold text-[10px] tracking-widest">SELECTED WORKS //</span>
-            <button
-              onClick={() => setShowAllWorks(v => !v)}
-              className="font-['Geist_Mono',monospace] text-[#ff4800] text-[11px] tracking-[0.5px] px-4 py-2 cursor-pointer hover:text-[#e03e00] active:scale-95 transition-all"
-            >
-              {showAllWorks ? "[ HIDE WORKS ↑ ]" : "[ VIEW ALL WORKS → ]"}
-            </button>
           </div>
 
           {/* Gallery row 1 */}
@@ -1306,28 +1299,6 @@ export default function App() {
             ].map(({ src, code, index, title, videos }) => (
               <GalleryCard key={code} src={src} code={code} index={index} title={title} height={280} videos={videos} />
             ))}
-          </div>
-
-          {/* Gallery row 2 — collapsible */}
-          <div
-            style={{
-              display: "grid",
-              gridTemplateRows: showAllWorks ? "1fr" : "0fr",
-              transition: "grid-template-rows 0.5s cubic-bezier(0.4,0,0.2,1)",
-            }}
-          >
-            <div style={{ overflow: "hidden" }}>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-2 w-full pt-2">
-                {[
-                  { src: imgArt1,     code: "[ARTD_001]",  index: "[05]", title: "ART /\nDIRECTION"   },
-                  { src: imgArt2,     code: "[ARTD_002]",  index: "[06]", title: "CAMPAIGN /\nLUXURY"  },
-                  { src: imgFashion2, code: "[FSHN_003]",  index: "[07]", title: "CULTURE /\nIDENTITY" },
-                  { src: imgEcomm1,   code: "[ECOMM_003]", index: "[08]", title: "STUDIO /\nPRODUCTION"},
-                ].map(({ src, code, index, title }) => (
-                  <GalleryCard key={code} src={src} code={code} index={index} title={title} height={280} />
-                ))}
-              </div>
-            </div>
           </div>
         </div>
       </section>
