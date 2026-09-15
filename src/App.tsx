@@ -1,5 +1,16 @@
 import { useState, useRef, useCallback, useEffect, MouseEvent as ReactMouseEvent, FormEvent } from "react";
 
+const MAKE_WEBHOOK_URL = "https://hook.eu1.make.com/29jx1bv0yu71y211ep0m85ny0fh4cxn3";
+
+async function submitToMakeWebhook(data: { name: string; email: string; brief: string }) {
+  const res = await fetch(MAKE_WEBHOOK_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error(`Webhook responded with ${res.status}`);
+}
+
 const assetPathPrefix = "/assets";
 const imgHero = `${assetPathPrefix}/dd176.png`;
 const imgCorner = `${assetPathPrefix}/6de3d.png`;
@@ -328,13 +339,19 @@ function ProjectModal({ onClose }: { onClose: () => void }) {
     return e;
   };
 
-  const handleSubmit = (ev: FormEvent) => {
+  const handleSubmit = async (ev: FormEvent) => {
     ev.preventDefault();
     const e = validate();
     if (Object.keys(e).length) { setErrors(e); return; }
     setErrors({});
     setFormState("sending");
-    setTimeout(() => setFormState("sent"), 1400);
+    try {
+      await submitToMakeWebhook(formData);
+      setFormState("sent");
+    } catch {
+      setFormState("idle");
+      setErrors({ brief: "Submission failed. Please try again." });
+    }
   };
 
   const inputCls = (err?: string) =>
@@ -974,7 +991,7 @@ export default function App() {
     return errors;
   };
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     const errors = validate();
     if (Object.keys(errors).length > 0) {
@@ -983,11 +1000,15 @@ export default function App() {
     }
     setFormErrors({});
     setFormState("sending");
-    setTimeout(() => {
+    try {
+      await submitToMakeWebhook(formData);
       setFormState("sent");
       setFormData({ name: "", email: "", brief: "" });
       setActiveStep(3);
-    }, 1400);
+    } catch {
+      setFormState("idle");
+      setFormErrors({ brief: "Submission failed. Please try again." });
+    }
   };
 
   const inputBase =
