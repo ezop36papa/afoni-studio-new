@@ -19,6 +19,16 @@ async function submitToMakeWebhook(data: { name: string; email: string; brief: s
   if (!res.ok) throw new Error(`Webhook responded with ${res.status}`);
 }
 
+// Video groups for the "Selected Works" gallery cards — each card cycles
+// through several thematically related clips via the lightbox switcher.
+const BLOB_HOST = "https://q1pwcp53fg9g9i8k.public.blob.vercel-storage.com";
+const galleryClip = (id: string) => ({ src: `${BLOB_HOST}/${id}.mp4`, poster: `${BLOB_HOST}/${id}.jpg` });
+
+const VIDEO_LIFESTYLE_BEAUTY = [galleryClip("IMG_4538"), galleryClip("IMG_5050")];
+const VIDEO_SPORT = [galleryClip("IMG_5396"), galleryClip("IMG_1339"), galleryClip("IMG_3913"), galleryClip("IMG_4679"), galleryClip("IMG_5940")];
+const VIDEO_AUTOMOTIVE = [galleryClip("IMG_5939"), galleryClip("IMG_5937"), galleryClip("IMG_5089")];
+const VIDEO_CONCEPT_FILM = [galleryClip("IMG_5938"), galleryClip("IMG_5651")];
+
 const assetPathPrefix = "/assets";
 const imgHero = `${assetPathPrefix}/dd176.png`;
 const imgCorner = `${assetPathPrefix}/6de3d.png`;
@@ -178,6 +188,108 @@ function Lightbox({ src, code, onClose }: { src: string; code: string; onClose: 
         />
         <div className="flex items-center justify-between">
           <span className="font-['Geist_Mono',monospace] text-white/60 text-[10px]">{code}</span>
+          <button
+            onClick={onClose}
+            className="font-['Geist_Mono',monospace] text-[#ff4800] text-[11px] tracking-[0.5px] hover:text-white transition-colors"
+          >
+            [ CLOSE × ]
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── Video Lightbox (with theme switcher) ── */
+type GalleryVideo = { src: string; poster: string };
+
+function VideoLightbox({ videos, code, onClose }: { videos: GalleryVideo[]; code: string; onClose: () => void }) {
+  const [index, setIndex] = useState(0);
+  const [muted, setMuted] = useState(true);
+  const current = videos[index];
+
+  const prev = useCallback(() => setIndex((i) => (i - 1 + videos.length) % videos.length), [videos.length]);
+  const next = useCallback(() => setIndex((i) => (i + 1) % videos.length), [videos.length]);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+      if (e.key === "ArrowLeft") prev();
+      if (e.key === "ArrowRight") next();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose, prev, next]);
+
+  return (
+    <div className="fixed inset-0 z-[100] bg-black/90 flex flex-col items-center justify-center" onClick={onClose}>
+      <div className="relative max-w-[92vw] max-h-[88vh] flex flex-col gap-3" onClick={(e) => e.stopPropagation()}>
+        <div className="relative">
+          <video
+            key={current.src}
+            src={current.src}
+            poster={current.poster}
+            autoPlay
+            loop
+            muted={muted}
+            playsInline
+            className="max-w-full max-h-[76vh] object-contain rounded-[2px] select-none bg-black"
+          />
+
+          {videos.length > 1 && (
+            <>
+              <button
+                onClick={prev}
+                aria-label="Previous video"
+                className="absolute left-2 top-1/2 -translate-y-1/2 flex items-center justify-center w-9 h-9 rounded-[2px] border border-white/25 bg-black/50 text-white hover:border-[#ff4800] hover:text-[#ff4800] transition-colors font-['Geist_Mono',monospace] text-[16px]"
+              >
+                ‹
+              </button>
+              <button
+                onClick={next}
+                aria-label="Next video"
+                className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center justify-center w-9 h-9 rounded-[2px] border border-white/25 bg-black/50 text-white hover:border-[#ff4800] hover:text-[#ff4800] transition-colors font-['Geist_Mono',monospace] text-[16px]"
+              >
+                ›
+              </button>
+            </>
+          )}
+
+          <button
+            onClick={() => setMuted((m) => !m)}
+            aria-label={muted ? "Unmute" : "Mute"}
+            className="absolute bottom-3 right-3 flex items-center justify-center w-8 h-8 rounded-[2px] border border-white/25 bg-black/50 hover:border-[#ff4800] transition-colors"
+          >
+            {muted ? (
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                <path d="M2 4H4.5L7.5 1.5v9L4.5 8H2V4Z" stroke="rgba(255,255,255,0.6)" fill="rgba(255,255,255,0.2)" strokeWidth="0.8"/>
+                <path d="M9 4.5l2 3M11 4.5l-2 3" stroke="white" strokeWidth="1.2" strokeLinecap="round"/>
+              </svg>
+            ) : (
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                <path d="M2 4H4.5L7.5 1.5v9L4.5 8H2V4Z" stroke="white" fill="rgba(255,255,255,0.25)" strokeWidth="0.8"/>
+                <path d="M9.5 4.5c.8.5 1.2 1.2 1.2 1.5s-.4 1-.8 1.5" stroke="white" strokeWidth="1.2" strokeLinecap="round"/>
+              </svg>
+            )}
+          </button>
+        </div>
+
+        {videos.length > 1 && (
+          <div className="flex items-center justify-center gap-2">
+            {videos.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setIndex(i)}
+                aria-label={`Video ${i + 1}`}
+                className="w-2 h-2 rounded-full transition-colors"
+                style={{ background: i === index ? "#ff4800" : "rgba(255,255,255,0.3)" }}
+              />
+            ))}
+          </div>
+        )}
+
+        <div className="flex items-center justify-between">
+          <span className="font-['Geist_Mono',monospace] text-white/60 text-[10px]">{code} // {index + 1}/{videos.length}</span>
           <button
             onClick={onClose}
             className="font-['Geist_Mono',monospace] text-[#ff4800] text-[11px] tracking-[0.5px] hover:text-white transition-colors"
@@ -478,7 +590,7 @@ function useParallaxTilt() {
 }
 
 /* ── Gallery card ── */
-function GalleryCard({ src, code, index, title, height = 280 }: { src: string; code: string; index: string; title: string; height?: number }) {
+function GalleryCard({ src, code, index, title, height = 280, videos }: { src: string; code: string; index: string; title: string; height?: number; videos?: GalleryVideo[] }) {
   const cardRef = useRef<HTMLDivElement>(null);
   const [transform, setTransform] = useState("rotateX(0deg) rotateY(0deg)");
   const [imgShift, setImgShift] = useState({ x: 0, y: 0 });
@@ -553,7 +665,11 @@ function GalleryCard({ src, code, index, title, height = 280 }: { src: string; c
           </div>
         </div>
       </div>
-      {lightbox && <Lightbox src={src} code={code} onClose={() => setLightbox(false)} />}
+      {lightbox && (
+        videos && videos.length > 0
+          ? <VideoLightbox videos={videos} code={code} onClose={() => setLightbox(false)} />
+          : <Lightbox src={src} code={code} onClose={() => setLightbox(false)} />
+      )}
     </>
   );
 }
@@ -1183,12 +1299,12 @@ export default function App() {
           {/* Gallery row 1 */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2 w-full">
             {[
-              { src: imgFashion1, code: "[FSHN_001]", index: "[01]", title: "LIFESTYLE /\nBEAUTY" },
-              { src: imgFashion2, code: "[FSHN_002]", index: "[02]", title: "SPORT"                },
-              { src: imgEcomm1,   code: "[ECOMM_001]", index: "[03]", title: "AUTOMOTIVE"          },
-              { src: imgEcomm2,   code: "[ECOMM_002]", index: "[04]", title: "CONCEPT /\nFILM"     },
-            ].map(({ src, code, index, title }) => (
-              <GalleryCard key={code} src={src} code={code} index={index} title={title} height={280} />
+              { src: imgFashion1, code: "[FSHN_001]", index: "[01]", title: "LIFESTYLE /\nBEAUTY", videos: VIDEO_LIFESTYLE_BEAUTY },
+              { src: imgFashion2, code: "[FSHN_002]", index: "[02]", title: "SPORT",                videos: VIDEO_SPORT },
+              { src: imgEcomm1,   code: "[ECOMM_001]", index: "[03]", title: "AUTOMOTIVE",          videos: VIDEO_AUTOMOTIVE },
+              { src: imgEcomm2,   code: "[ECOMM_002]", index: "[04]", title: "CONCEPT /\nFILM",     videos: VIDEO_CONCEPT_FILM },
+            ].map(({ src, code, index, title, videos }) => (
+              <GalleryCard key={code} src={src} code={code} index={index} title={title} height={280} videos={videos} />
             ))}
           </div>
 
