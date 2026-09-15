@@ -1183,10 +1183,10 @@ export default function App() {
           {/* Gallery row 1 */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2 w-full">
             {[
-              { src: imgFashion1, code: "[FSHN_001]", index: "[01]", title: "FASHION /\nEDITORIAL" },
-              { src: imgFashion2, code: "[FSHN_002]", index: "[02]", title: "BEAUTY /\nPORTRAIT"   },
-              { src: imgEcomm1,   code: "[ECOMM_001]", index: "[03]", title: "PRODUCT /\nE-COMM"   },
-              { src: imgEcomm2,   code: "[ECOMM_002]", index: "[04]", title: "LIFESTYLE /\nBRAND"  },
+              { src: imgFashion1, code: "[FSHN_001]", index: "[01]", title: "LIFESTYLE /\nBEAUTY" },
+              { src: imgFashion2, code: "[FSHN_002]", index: "[02]", title: "SPORT"                },
+              { src: imgEcomm1,   code: "[ECOMM_001]", index: "[03]", title: "AUTOMOTIVE"          },
+              { src: imgEcomm2,   code: "[ECOMM_002]", index: "[04]", title: "CONCEPT /\nFILM"     },
             ].map(({ src, code, index, title }) => (
               <GalleryCard key={code} src={src} code={code} index={index} title={title} height={280} />
             ))}
