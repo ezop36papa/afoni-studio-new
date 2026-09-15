@@ -1299,10 +1299,10 @@ export default function App() {
           {/* Gallery row 1 */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2 w-full">
             {[
-              { src: imgFashion1, code: "[FSHN_001]", index: "[01]", title: "LIFESTYLE /\nBEAUTY", videos: VIDEO_LIFESTYLE_BEAUTY },
-              { src: imgFashion2, code: "[FSHN_002]", index: "[02]", title: "SPORT",                videos: VIDEO_SPORT },
-              { src: imgEcomm1,   code: "[ECOMM_001]", index: "[03]", title: "AUTOMOTIVE",          videos: VIDEO_AUTOMOTIVE },
-              { src: imgEcomm2,   code: "[ECOMM_002]", index: "[04]", title: "CONCEPT /\nFILM",     videos: VIDEO_CONCEPT_FILM },
+              { src: VIDEO_LIFESTYLE_BEAUTY[0].poster, code: "[FSHN_001]", index: "[01]", title: "LIFESTYLE /\nBEAUTY", videos: VIDEO_LIFESTYLE_BEAUTY },
+              { src: VIDEO_SPORT[0].poster,            code: "[FSHN_002]", index: "[02]", title: "SPORT",                videos: VIDEO_SPORT },
+              { src: VIDEO_AUTOMOTIVE[0].poster,       code: "[ECOMM_001]", index: "[03]", title: "AUTOMOTIVE",          videos: VIDEO_AUTOMOTIVE },
+              { src: VIDEO_CONCEPT_FILM[0].poster,     code: "[ECOMM_002]", index: "[04]", title: "CONCEPT /\nFILM",     videos: VIDEO_CONCEPT_FILM },
             ].map(({ src, code, index, title, videos }) => (
               <GalleryCard key={code} src={src} code={code} index={index} title={title} height={280} videos={videos} />
             ))}
