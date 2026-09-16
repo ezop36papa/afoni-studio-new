@@ -19,6 +19,28 @@ async function submitToMakeWebhook(data: { name: string; email: string; brief: s
   if (!res.ok) throw new Error(`Webhook responded with ${res.status}`);
 }
 
+async function submitFeedbackToMakeWebhook(data: { name: string; email: string; rating: number; review: string }) {
+  const res = await fetch(MAKE_WEBHOOK_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    // Same webhook as the project intake form, tagged so the Make scenario /
+    // Telegram bot can tell feedback apart from project briefs. The rating is
+    // folded into brief/text too, so it shows up even if the scenario only
+    // reads those fields.
+    body: JSON.stringify({
+      type: "feedback",
+      name: data.name,
+      email: data.email,
+      contact: data.email,
+      rating: data.rating,
+      review: data.review,
+      brief: `[Feedback ${data.rating}/5] ${data.review}`,
+      text: `[Feedback ${data.rating}/5] ${data.review}`,
+    }),
+  });
+  if (!res.ok) throw new Error(`Webhook responded with ${res.status}`);
+}
+
 // Video groups for the "Selected Works" gallery cards — each card cycles
 // through several thematically related clips via the lightbox switcher.
 const BLOB_HOST = "https://q1pwcp53fg9g9i8k.public.blob.vercel-storage.com";
@@ -567,6 +589,132 @@ function ProjectModal({ onClose }: { onClose: () => void }) {
         </div>
       </div>
     </div>
+  );
+}
+
+/* ── Feedback / review form ── */
+function FeedbackSection() {
+  const [feedbackState, setFeedbackState] = useState<"idle" | "sending" | "sent">("idle");
+  const [feedbackData, setFeedbackData] = useState({ name: "", email: "", rating: 0, review: "" });
+  const [feedbackErrors, setFeedbackErrors] = useState<{ name?: string; email?: string; rating?: string; review?: string }>({});
+
+  const validateFeedback = () => {
+    const e: typeof feedbackErrors = {};
+    if (!feedbackData.name.trim()) e.name = "Required";
+    if (!feedbackData.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(feedbackData.email)) e.email = "Valid email required";
+    if (!feedbackData.rating) e.rating = "Pick a rating";
+    if (!feedbackData.review.trim()) e.review = "Required";
+    return e;
+  };
+
+  const handleFeedbackSubmit = async (ev: FormEvent) => {
+    ev.preventDefault();
+    const e = validateFeedback();
+    if (Object.keys(e).length) { setFeedbackErrors(e); return; }
+    setFeedbackErrors({});
+    setFeedbackState("sending");
+    try {
+      await submitFeedbackToMakeWebhook(feedbackData);
+      setFeedbackState("sent");
+    } catch {
+      setFeedbackState("idle");
+      setFeedbackErrors({ review: "Submission failed. Please try again." });
+    }
+  };
+
+  const inputCls = (err?: string) =>
+    `w-full bg-transparent border-b py-3 font-['Outfit',sans-serif] text-[14px] theme-text outline-none transition-colors ${
+      err ? "border-red-400" : "theme-border focus:border-[#ff4800]"
+    }`;
+
+  return (
+    <section className="theme-border border-b max-w-[1440px] mx-auto w-full">
+      <div className="px-6 md:px-12 py-12 flex flex-col gap-6">
+        <div className="flex items-center gap-3">
+          <div className="bg-[#ff4800] w-1 h-4 rounded-full" />
+          <span className="theme-text font-['Geist_Mono',monospace] font-bold text-[11px] tracking-widest">LEAVE FEEDBACK //</span>
+        </div>
+
+        {feedbackState === "sent" ? (
+          <div
+            className="flex items-center gap-3 rounded-[2px] border py-4 px-4 max-w-[560px]"
+            style={{ borderColor: "rgba(34,197,94,0.35)" }}
+          >
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="shrink-0">
+              <path d="M8 1.5C4.41 1.5 1.5 4.41 1.5 8S4.41 14.5 8 14.5 14.5 11.59 14.5 8 11.59 1.5 8 1.5Z" stroke="#22c55e" strokeWidth="1.2" />
+              <path d="M5 8l2 2 4-4" stroke="#22c55e" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+            <span className="theme-text font-['Geist_Mono',monospace] text-[11px]">Дякуємо за відгук! Ми цінуємо твою думку.</span>
+          </div>
+        ) : (
+          <form onSubmit={handleFeedbackSubmit} className="flex flex-col gap-5 max-w-[560px]" noValidate>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div className="flex flex-col gap-1.5">
+                <label className="font-['Geist_Mono',monospace] font-semibold theme-muted text-[9px] tracking-[0.5px]">NAME</label>
+                <input
+                  type="text"
+                  value={feedbackData.name}
+                  onChange={(e) => setFeedbackData((d) => ({ ...d, name: e.target.value }))}
+                  placeholder="Your name..."
+                  className={inputCls(feedbackErrors.name)}
+                />
+                {feedbackErrors.name && <span className="font-['Geist_Mono',monospace] text-red-500 text-[9px]">{feedbackErrors.name}</span>}
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <label className="font-['Geist_Mono',monospace] font-semibold theme-muted text-[9px] tracking-[0.5px]">EMAIL ADDRESS</label>
+                <input
+                  type="email"
+                  value={feedbackData.email}
+                  onChange={(e) => setFeedbackData((d) => ({ ...d, email: e.target.value }))}
+                  placeholder="you@company.com"
+                  className={inputCls(feedbackErrors.email)}
+                />
+                {feedbackErrors.email && <span className="font-['Geist_Mono',monospace] text-red-500 text-[9px]">{feedbackErrors.email}</span>}
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <label className="font-['Geist_Mono',monospace] font-semibold theme-muted text-[9px] tracking-[0.5px]">RATING</label>
+              <div className="flex items-center gap-1.5">
+                {[1, 2, 3, 4, 5].map((n) => (
+                  <button
+                    key={n}
+                    type="button"
+                    onClick={() => setFeedbackData((d) => ({ ...d, rating: n }))}
+                    aria-label={`${n} star${n > 1 ? "s" : ""}`}
+                    className="text-[22px] leading-none transition-transform hover:scale-110"
+                    style={{ color: n <= feedbackData.rating ? "#ff4800" : "var(--border-soft)" }}
+                  >
+                    ★
+                  </button>
+                ))}
+              </div>
+              {feedbackErrors.rating && <span className="font-['Geist_Mono',monospace] text-red-500 text-[9px]">{feedbackErrors.rating}</span>}
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <label className="font-['Geist_Mono',monospace] font-semibold theme-muted text-[9px] tracking-[0.5px]">YOUR FEEDBACK</label>
+              <textarea
+                rows={3}
+                value={feedbackData.review}
+                onChange={(e) => setFeedbackData((d) => ({ ...d, review: e.target.value }))}
+                placeholder="Share your experience working with us..."
+                className={`${inputCls(feedbackErrors.review)} resize-none`}
+              />
+              {feedbackErrors.review && <span className="font-['Geist_Mono',monospace] text-red-500 text-[9px]">{feedbackErrors.review}</span>}
+            </div>
+
+            <button
+              type="submit"
+              disabled={feedbackState === "sending"}
+              className="self-start bg-[#ff4800] text-[#0d0d0d] font-['Geist_Mono',monospace] font-bold text-[12px] tracking-[1px] px-8 py-3.5 rounded-[2px] hover:bg-[#e03e00] disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.97] transition-all shadow-[0_4px_24px_rgba(255,72,0,0.35)] hover:shadow-[0_6px_32px_rgba(255,72,0,0.5)]"
+            >
+              {feedbackState === "sending" ? "SENDING..." : "SEND_FEEDBACK →"}
+            </button>
+          </form>
+        )}
+      </div>
+    </section>
   );
 }
 
@@ -1677,6 +1825,8 @@ export default function App() {
         </div>{/* end bordered container + flex row */}
         </div>{/* end px wrapper */}
       </section>
+
+      <FeedbackSection />
 
       {/* Footer */}
       <footer className="theme-border border-t flex flex-col gap-4 px-6 md:px-12 py-6 max-w-[1440px] mx-auto w-full">
