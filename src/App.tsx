@@ -46,7 +46,7 @@ async function submitFeedbackToMakeWebhook(data: { name: string; email: string; 
 const BLOB_HOST = "https://q1pwcp53fg9g9i8k.public.blob.vercel-storage.com";
 const galleryClip = (id: string) => ({ src: `${BLOB_HOST}/${id}.mp4`, poster: `${BLOB_HOST}/${id}.jpg` });
 
-const VIDEO_LIFESTYLE_BEAUTY = [galleryClip("IMG_4538"), galleryClip("IMG_5050"), galleryClip("IMG_5938"), galleryClip("IMG_5651")];
+const VIDEO_LIFESTYLE_BEAUTY = [galleryClip("IMG_5050"), galleryClip("IMG_4538"), galleryClip("IMG_5938"), galleryClip("IMG_5651")];
 const VIDEO_SPORT = [galleryClip("IMG_5396"), galleryClip("IMG_1339"), galleryClip("IMG_3913"), galleryClip("IMG_4679"), galleryClip("IMG_5940")];
 const VIDEO_AUTOMOTIVE = [galleryClip("IMG_5939"), galleryClip("IMG_5937"), galleryClip("IMG_5089")];
 const VIDEO_CONCEPT_FILM = [galleryClip("IMG_1259")];
@@ -1609,10 +1609,10 @@ export default function App() {
           {/* Gallery row 1 */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2 w-full">
             {[
-              { src: HERO_LIFESTYLE_BEAUTY,        code: "[FSHN_001]", index: "[01]", title: "LIFESTYLE /\nBEAUTY", videos: VIDEO_LIFESTYLE_BEAUTY },
-              { src: VIDEO_SPORT[0].poster,        code: "[FSHN_002]", index: "[02]", title: "SPORT",                videos: VIDEO_SPORT },
-              { src: VIDEO_AUTOMOTIVE[0].poster,   code: "[ECOMM_001]", index: "[03]", title: "AUTOMOTIVE",          videos: VIDEO_AUTOMOTIVE },
-              { src: VIDEO_CONCEPT_FILM[0].poster, code: "[ECOMM_002]", index: "[04]", title: "CONCEPT /\nFILM",     videos: VIDEO_CONCEPT_FILM },
+              { src: HERO_LIFESTYLE_BEAUTY,        code: "[BEAUTY_001]", index: "[01]", title: "LIFESTYLE /\nBEAUTY", videos: VIDEO_LIFESTYLE_BEAUTY },
+              { src: VIDEO_SPORT[0].poster,        code: "[SPORT_001]",  index: "[02]", title: "SPORT",                videos: VIDEO_SPORT },
+              { src: VIDEO_AUTOMOTIVE[0].poster,   code: "[AUTO_001]",   index: "[03]", title: "AUTOMOTIVE",          videos: VIDEO_AUTOMOTIVE },
+              { src: VIDEO_CONCEPT_FILM[0].poster, code: "[FILM_001]",   index: "[04]", title: "CONCEPT /\nFILM",     videos: VIDEO_CONCEPT_FILM },
             ].map(({ src, code, index, title, videos }) => (
               <GalleryCard key={code} src={src} code={code} index={index} title={title} height={280} videos={videos} />
             ))}
