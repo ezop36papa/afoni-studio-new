@@ -1629,22 +1629,36 @@ export default function App() {
               initials: "AR",
               name: "Amina Rosa",
               role: "Creative Director, London",
+              rating: 5,
               quote: "\"AFONI delivered a campaign that felt premium, modern, and completely on-brand. The team moved fast and the final assets were incredibly polished.\"",
             },
             {
               initials: "JK",
               name: "Jules Kim",
               role: "Brand Lead, Barcelona",
+              rating: 5,
               quote: "\"The retainer model gave us consistent quality and fast turnaround. AFONI understood our brand language from day one.\"",
             },
             {
               initials: "SR",
               name: "Sofia Rivas",
               role: "Product Marketing, Paris",
+              rating: 5,
               quote: "\"The final deliverables were stunning. AFONI balanced art direction with production efficiency — exactly what we needed for launch.\"",
             },
-          ].map(({ initials, name, role, quote }) => (
-            <div key={name} className="theme-bg-alt theme-border-s border rounded-[2px] px-6 py-6 flex flex-col gap-6">
+          ].map(({ initials, name, role, rating, quote }) => (
+            <div key={name} className="theme-bg-alt theme-border-s border rounded-[2px] px-6 py-6 flex flex-col gap-4">
+              <div className="flex items-center gap-0.5" aria-label={`${rating} out of 5 stars`}>
+                {[1, 2, 3, 4, 5].map((n) => (
+                  <span
+                    key={n}
+                    className="text-[14px] leading-none"
+                    style={{ color: n <= rating ? "#ff4800" : "var(--border-soft)" }}
+                  >
+                    ★
+                  </span>
+                ))}
+              </div>
               <p className="theme-text font-['Outfit',sans-serif] text-[13px] leading-[20px] flex-1">{quote}</p>
               <div className="flex items-center gap-3">
                 <div className="size-8 rounded-full bg-[#ff4800]/15 border border-[#ff4800]/30 flex items-center justify-center shrink-0">
@@ -2000,7 +2014,7 @@ export default function App() {
           <nav className="flex gap-5 items-center flex-wrap">
             {[
               { label: "INSTAGRAM", href: "https://www.instagram.com/afoni.studio/" },
-              { label: "BEHANCE", href: "https://behance.net" },
+              { label: "BEHANCE", href: "https://www.behance.net/afonistudioai" },
               { label: "LINKEDIN", href: "https://www.linkedin.com/company/afoni-studio/?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAcGRvZgJleHRuA2FlbQIxMQBzcnRjBmFwcF9pZA85MzY2MTk3NDMzOTI0NTkAAacAkygec980oHuNR6DPMqNJg0o-oIEsPqAWj4q1tLr8J-jR-M8VS8QCwIkm0Q_aem_b4-9vhrSDfwjviBrjWsgHw" },
             ].map(({ label, href }) => (
               <a
