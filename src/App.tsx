@@ -999,6 +999,9 @@ const VIDEOS = [
   },
 ];
 
+const HERO_VIDEO_SRC = "https://files.catbox.moe/n0sbsd.mp4";
+const HERO_VIDEOS: GalleryVideo[] = [{ src: HERO_VIDEO_SRC, poster: "" }];
+
 function VideoHero() {
   const [index, setIndex] = useState(0);
   const [playing, setPlaying] = useState(true);
@@ -1007,7 +1010,8 @@ function VideoHero() {
   const [progress, setProgress] = useState(0);
   const [transitioning, setTransitioning] = useState(false);
   const [hasError, setHasError] = useState(false);
-  const [ratio, setRatio] = useState<number | null>(null);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const { ref: tiltRef, style: tiltStyle, onMouseMove, onMouseLeave } = useParallaxTilt();
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const current = VIDEOS[index];
@@ -1088,13 +1092,14 @@ function VideoHero() {
   };
 
   return (
+    <>
     <div
-      className="relative rounded-[2px] overflow-hidden self-center group"
-      style={
-        ratio
-          ? { aspectRatio: `${ratio}`, height: "clamp(240px, 42vw, 560px)", maxWidth: "100%" }
-          : { height: "clamp(240px, 33vw, 480px)", width: "100%" }
-      }
+      ref={tiltRef}
+      onMouseMove={onMouseMove}
+      onMouseLeave={onMouseLeave}
+      onClick={() => setLightboxOpen(true)}
+      style={{ ...tiltStyle, height: "clamp(240px, 33vw, 480px)" }}
+      className="relative rounded-[2px] overflow-hidden w-full group cursor-zoom-in"
     >
       {/* Neutral background while the video buffers — no stale placeholder photo underneath */}
       <div
@@ -1105,9 +1110,9 @@ function VideoHero() {
       {/* Video — rendered only when a src exists */}
       {!hasError && (
   <video
-    key="https://files.catbox.moe/n0sbsd.mp4"
+    key={HERO_VIDEO_SRC}
     ref={videoRef}
-    src="https://files.catbox.moe/n0sbsd.mp4"
+    src={HERO_VIDEO_SRC}
     autoPlay
     loop
     muted={muted}
@@ -1115,17 +1120,21 @@ function VideoHero() {
     preload="auto"
     className="absolute inset-0 w-full h-full object-cover rounded-[2px]"
     style={{ opacity: 1 }}
-    onLoadedMetadata={(e) => {
-      const v = e.currentTarget;
-      if (v.videoWidth && v.videoHeight) setRatio(v.videoWidth / v.videoHeight);
-    }}
     onError={() => { setHasError(true); setPlaying(false); }}
   />
 )}
 
 
       {/* Dark overlay */}
-      <div className="absolute inset-0 bg-black/25 rounded-[2px]" />
+      <div className="absolute inset-0 bg-black/25 rounded-[2px] pointer-events-none" />
+
+      {/* Expand hint — click anywhere on the video to open it fullscreen */}
+      <div className="absolute top-3 right-3 flex items-center gap-2 px-2.5 py-1.5 rounded-[2px] border border-white/20 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+        <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
+          <path d="M4 1H1v3M7 1h3v3M4 10H1V7M7 10h3V7" stroke="white" strokeWidth="1.1" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+        <span className="font-['Geist_Mono',monospace] text-white/80 text-[9px] tracking-[0.5px]">EXPAND</span>
+      </div>
 
       {/* Awaiting badge */}
       {(!hasSource || hasError) && !transitioning && (
@@ -1141,7 +1150,10 @@ function VideoHero() {
       )}
 
       {/* Controls bar — play/pause + volume */}
-      <div className="absolute bottom-0 left-0 right-0 bg-[rgba(13,13,13,0.9)] border-t border-white/10 px-4 h-[44px] flex items-center gap-3">
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="absolute bottom-0 left-0 right-0 bg-[rgba(13,13,13,0.9)] border-t border-white/10 px-4 h-[44px] flex items-center gap-3 cursor-auto"
+      >
         {/* Play / Pause */}
         <button
           onClick={togglePlay}
@@ -1195,6 +1207,10 @@ function VideoHero() {
         </div>
       </div>
     </div>
+    {lightboxOpen && (
+      <VideoLightbox videos={HERO_VIDEOS} code="[CAMPAIGN_001]" onClose={() => setLightboxOpen(false)} />
+    )}
+    </>
   );
 }
 
