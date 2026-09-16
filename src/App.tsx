@@ -592,11 +592,135 @@ function ProjectModal({ onClose }: { onClose: () => void }) {
   );
 }
 
-/* ── Feedback / review form ── */
-function FeedbackSection() {
+/* ── Feedback terminal completion (matrix-style log, same pattern as SubmitSuccess) ── */
+function FeedbackSuccess({ rating, onReset }: { rating: number; onReset: () => void }) {
+  const logLines = [
+    { delay: 0,    text: "FEEDBACK_PROTOCOL // REVIEW RECEIVED",           accent: false, green: false },
+    { delay: 400,  text: "SYS: VALIDATING SUBMISSION...",                  accent: false, green: false },
+    { delay: 900,  text: "SENTIMENT_ENGINE // PARSING REVIEW TEXT",        accent: false, green: false },
+    { delay: 1400, text: `RATING LOCKED // ${rating}/5 STARS`,             accent: true,  green: false },
+    { delay: 1900, text: "REVIEW_ENTRY // INDEXED",                        accent: false, green: false },
+    { delay: 2500, text: "NOTIFICATION_QUEUE // TELEGRAM DISPATCH",        accent: false, green: false },
+    { delay: 3100, text: "SYS://STANDBY — THANK YOU FOR YOUR FEEDBACK.",   accent: true,  green: true  },
+  ];
+  const [visibleCount, setVisibleCount] = useState(0);
+  const [progress, setProgress] = useState(0);
+  const [cursor, setCursor] = useState(true);
+
+  useEffect(() => {
+    logLines.forEach((line, i) => {
+      setTimeout(() => setVisibleCount(i + 1), line.delay);
+    });
+    const start = Date.now();
+    const totalDuration = 3600;
+    const raf = () => {
+      const p = Math.min((Date.now() - start) / totalDuration, 1);
+      setProgress(p);
+      if (p < 1) requestAnimationFrame(raf);
+    };
+    requestAnimationFrame(raf);
+    const blink = setInterval(() => setCursor((c) => !c), 530);
+    return () => clearInterval(blink);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return (
+    <div className="w-full flex flex-col gap-6 py-2">
+      {/* Terminal window */}
+      <div className="border border-[rgba(26,26,26,0.24)] rounded-[2px] overflow-hidden">
+        {/* Title bar */}
+        <div className="bg-[#1a1a1a] flex items-center justify-between px-4 py-2">
+          <div className="flex gap-1.5 items-center">
+            <div className="size-2.5 rounded-full bg-[#ff4800]" />
+            <div className="size-2.5 rounded-full bg-[#70706b]" />
+            <div className="size-2.5 rounded-full bg-[#70706b]" />
+          </div>
+          <span className="font-['Geist_Mono',monospace] text-white/40 text-[9px] tracking-widest">
+            AFONI_SYS // FEEDBACK_TERMINAL v1.0
+          </span>
+          <div className="flex gap-1.5 items-center">
+            <div className="bg-[#22c55e] opacity-70 rounded-full size-[6px]" />
+            <span className="font-['Geist_Mono',monospace] text-[#22c55e]/70 text-[9px]">ONLINE</span>
+          </div>
+        </div>
+
+        {/* Log body */}
+        <div className="bg-[#0d0d0d] px-6 py-5 flex flex-col gap-2 min-h-[170px]">
+          {logLines.slice(0, visibleCount).map((line, i) => (
+            <div key={i} className="flex gap-3 items-start" style={{ animation: "slideIn 0.25s ease-out" }}>
+              <span className="font-['Geist_Mono',monospace] text-[#ff4800]/60 text-[9px] shrink-0 mt-px">▶</span>
+              <span
+                className={`font-['Geist_Mono',monospace] text-[10px] leading-[16px] ${
+                  line.green ? "text-[#22c55e]" : "text-white/70"
+                }`}
+              >
+                {line.text}
+              </span>
+            </div>
+          ))}
+          {visibleCount < logLines.length && (
+            <div className="flex gap-3 items-center">
+              <span className="font-['Geist_Mono',monospace] text-[#ff4800]/60 text-[9px]">▶</span>
+              <span
+                className="font-['Geist_Mono',monospace] text-white/40 text-[10px]"
+                style={{ opacity: cursor ? 1 : 0, transition: "opacity 0.1s" }}
+              >
+                █
+              </span>
+            </div>
+          )}
+          {visibleCount >= logLines.length && (
+            <div className="flex gap-3 items-center mt-1">
+              <span className="font-['Geist_Mono',monospace] text-[#22c55e]/80 text-[9px]">$</span>
+              <span
+                className="font-['Geist_Mono',monospace] text-[#22c55e]/60 text-[10px]"
+                style={{ opacity: cursor ? 1 : 0, transition: "opacity 0.1s" }}
+              >
+                █
+              </span>
+            </div>
+          )}
+        </div>
+
+        {/* Progress bar */}
+        <div className="bg-[#111] h-[3px] w-full">
+          <div
+            className="h-full bg-[#ff4800] transition-none"
+            style={{ width: `${progress * 100}%`, transition: "width 0.1s linear" }}
+          />
+        </div>
+      </div>
+
+      {/* Bottom message */}
+      <div
+        className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6"
+        style={{ opacity: visibleCount >= logLines.length ? 1 : 0, transition: "opacity 0.6s ease" }}
+      >
+        <div className="flex flex-col gap-1">
+          <p className="theme-text font-['Outfit',sans-serif] font-extrabold text-[18px] leading-tight">
+            Review received. Thank you.
+          </p>
+          <p className="theme-muted font-['Geist_Mono',monospace] text-[10px]">YOUR FEEDBACK HELPS US IMPROVE</p>
+        </div>
+        <button
+          onClick={onReset}
+          className="font-['Geist_Mono',monospace] text-[#ff4800] text-[11px] tracking-[0.5px] border border-[#ff4800] px-5 py-3 rounded-[2px] hover:bg-[#ff4800] hover:text-[#0d0d0d] transition-all shrink-0"
+        >
+          [ SUBMIT ANOTHER → ]
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/* ── Review form (lives inside "What clients say", with the same parallax tilt as the format/service cards) ── */
+function ReviewForm() {
+  const { ref, style: tiltStyle, onMouseMove, onMouseLeave } = useParallaxTilt();
   const [feedbackState, setFeedbackState] = useState<"idle" | "sending" | "sent">("idle");
   const [feedbackData, setFeedbackData] = useState({ name: "", email: "", rating: 0, review: "" });
   const [feedbackErrors, setFeedbackErrors] = useState<{ name?: string; email?: string; rating?: string; review?: string }>({});
+  const [hoverRating, setHoverRating] = useState(0);
+  const [poppedStar, setPoppedStar] = useState<number | null>(null);
 
   const validateFeedback = () => {
     const e: typeof feedbackErrors = {};
@@ -628,93 +752,108 @@ function FeedbackSection() {
     }`;
 
   return (
-    <section className="theme-border border-b max-w-[1440px] mx-auto w-full">
-      <div className="px-6 md:px-12 py-12 flex flex-col gap-6">
-        <div className="flex items-center gap-3">
-          <div className="bg-[#ff4800] w-1 h-4 rounded-full" />
-          <span className="theme-text font-['Geist_Mono',monospace] font-bold text-[11px] tracking-widest">LEAVE FEEDBACK //</span>
-        </div>
+    <div
+      ref={ref}
+      onMouseMove={onMouseMove}
+      onMouseLeave={() => { onMouseLeave(); setHoverRating(0); }}
+      style={tiltStyle}
+      className="theme-bg-alt theme-border-s border rounded-[2px] px-6 py-8 md:px-10 md:py-10 flex flex-col gap-6"
+    >
+      <div className="flex items-center gap-3">
+        <div className="bg-[#ff4800] w-1 h-4 rounded-full" />
+        <span className="theme-text font-['Geist_Mono',monospace] font-bold text-[11px] tracking-widest">LEAVE YOUR REVIEW //</span>
+      </div>
 
-        {feedbackState === "sent" ? (
-          <div
-            className="flex items-center gap-3 rounded-[2px] border py-4 px-4 max-w-[560px]"
-            style={{ borderColor: "rgba(34,197,94,0.35)" }}
-          >
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="shrink-0">
-              <path d="M8 1.5C4.41 1.5 1.5 4.41 1.5 8S4.41 14.5 8 14.5 14.5 11.59 14.5 8 11.59 1.5 8 1.5Z" stroke="#22c55e" strokeWidth="1.2" />
-              <path d="M5 8l2 2 4-4" stroke="#22c55e" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-            <span className="theme-text font-['Geist_Mono',monospace] text-[11px]">Дякуємо за відгук! Ми цінуємо твою думку.</span>
-          </div>
-        ) : (
-          <form onSubmit={handleFeedbackSubmit} className="flex flex-col gap-5 max-w-[560px]" noValidate>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-              <div className="flex flex-col gap-1.5">
-                <label className="font-['Geist_Mono',monospace] font-semibold theme-muted text-[9px] tracking-[0.5px]">NAME</label>
-                <input
-                  type="text"
-                  value={feedbackData.name}
-                  onChange={(e) => setFeedbackData((d) => ({ ...d, name: e.target.value }))}
-                  placeholder="Your name..."
-                  className={inputCls(feedbackErrors.name)}
-                />
-                {feedbackErrors.name && <span className="font-['Geist_Mono',monospace] text-red-500 text-[9px]">{feedbackErrors.name}</span>}
-              </div>
-              <div className="flex flex-col gap-1.5">
-                <label className="font-['Geist_Mono',monospace] font-semibold theme-muted text-[9px] tracking-[0.5px]">EMAIL ADDRESS</label>
-                <input
-                  type="email"
-                  value={feedbackData.email}
-                  onChange={(e) => setFeedbackData((d) => ({ ...d, email: e.target.value }))}
-                  placeholder="you@company.com"
-                  className={inputCls(feedbackErrors.email)}
-                />
-                {feedbackErrors.email && <span className="font-['Geist_Mono',monospace] text-red-500 text-[9px]">{feedbackErrors.email}</span>}
-              </div>
-            </div>
-
+      {feedbackState === "sent" ? (
+        <FeedbackSuccess
+          rating={feedbackData.rating}
+          onReset={() => {
+            setFeedbackState("idle");
+            setFeedbackData({ name: "", email: "", rating: 0, review: "" });
+          }}
+        />
+      ) : (
+        <form onSubmit={handleFeedbackSubmit} className="flex flex-col gap-5 max-w-[560px]" noValidate>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div className="flex flex-col gap-1.5">
-              <label className="font-['Geist_Mono',monospace] font-semibold theme-muted text-[9px] tracking-[0.5px]">RATING</label>
-              <div className="flex items-center gap-1.5">
-                {[1, 2, 3, 4, 5].map((n) => (
+              <label className="font-['Geist_Mono',monospace] font-semibold theme-muted text-[9px] tracking-[0.5px]">NAME</label>
+              <input
+                type="text"
+                value={feedbackData.name}
+                onChange={(e) => setFeedbackData((d) => ({ ...d, name: e.target.value }))}
+                placeholder="Your name..."
+                className={inputCls(feedbackErrors.name)}
+              />
+              {feedbackErrors.name && <span className="font-['Geist_Mono',monospace] text-red-500 text-[9px]">{feedbackErrors.name}</span>}
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <label className="font-['Geist_Mono',monospace] font-semibold theme-muted text-[9px] tracking-[0.5px]">EMAIL ADDRESS</label>
+              <input
+                type="email"
+                value={feedbackData.email}
+                onChange={(e) => setFeedbackData((d) => ({ ...d, email: e.target.value }))}
+                placeholder="you@company.com"
+                className={inputCls(feedbackErrors.email)}
+              />
+              {feedbackErrors.email && <span className="font-['Geist_Mono',monospace] text-red-500 text-[9px]">{feedbackErrors.email}</span>}
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <label className="font-['Geist_Mono',monospace] font-semibold theme-muted text-[9px] tracking-[0.5px]">RATING</label>
+            <div className="flex items-center gap-1.5" onMouseLeave={() => setHoverRating(0)}>
+              {[1, 2, 3, 4, 5].map((n) => {
+                const active = n <= (hoverRating || feedbackData.rating);
+                return (
                   <button
                     key={n}
                     type="button"
-                    onClick={() => setFeedbackData((d) => ({ ...d, rating: n }))}
+                    onClick={() => {
+                      setFeedbackData((d) => ({ ...d, rating: n }));
+                      setPoppedStar(n);
+                      setTimeout(() => setPoppedStar((cur) => (cur === n ? null : cur)), 420);
+                    }}
+                    onMouseEnter={() => setHoverRating(n)}
                     aria-label={`${n} star${n > 1 ? "s" : ""}`}
-                    className="text-[22px] leading-none transition-transform hover:scale-110"
-                    style={{ color: n <= feedbackData.rating ? "#ff4800" : "var(--border-soft)" }}
+                    className="text-[24px] leading-none"
+                    style={{
+                      color: active ? "#ff4800" : "var(--border-soft)",
+                      transform: active ? "scale(1.18)" : "scale(1)",
+                      filter: active ? "drop-shadow(0 0 6px rgba(255,72,0,0.55))" : "none",
+                      transition: "transform 0.15s ease-out, color 0.15s ease-out, filter 0.15s ease-out",
+                      animation: poppedStar === n ? "stepComplete 0.42s ease" : undefined,
+                    }}
                   >
                     ★
                   </button>
-                ))}
-              </div>
-              {feedbackErrors.rating && <span className="font-['Geist_Mono',monospace] text-red-500 text-[9px]">{feedbackErrors.rating}</span>}
+                );
+              })}
             </div>
+            {feedbackErrors.rating && <span className="font-['Geist_Mono',monospace] text-red-500 text-[9px]">{feedbackErrors.rating}</span>}
+          </div>
 
-            <div className="flex flex-col gap-1.5">
-              <label className="font-['Geist_Mono',monospace] font-semibold theme-muted text-[9px] tracking-[0.5px]">YOUR FEEDBACK</label>
-              <textarea
-                rows={3}
-                value={feedbackData.review}
-                onChange={(e) => setFeedbackData((d) => ({ ...d, review: e.target.value }))}
-                placeholder="Share your experience working with us..."
-                className={`${inputCls(feedbackErrors.review)} resize-none`}
-              />
-              {feedbackErrors.review && <span className="font-['Geist_Mono',monospace] text-red-500 text-[9px]">{feedbackErrors.review}</span>}
-            </div>
+          <div className="flex flex-col gap-1.5">
+            <label className="font-['Geist_Mono',monospace] font-semibold theme-muted text-[9px] tracking-[0.5px]">YOUR FEEDBACK</label>
+            <textarea
+              rows={3}
+              value={feedbackData.review}
+              onChange={(e) => setFeedbackData((d) => ({ ...d, review: e.target.value }))}
+              placeholder="Share your experience working with us..."
+              className={`${inputCls(feedbackErrors.review)} resize-none`}
+            />
+            {feedbackErrors.review && <span className="font-['Geist_Mono',monospace] text-red-500 text-[9px]">{feedbackErrors.review}</span>}
+          </div>
 
-            <button
-              type="submit"
-              disabled={feedbackState === "sending"}
-              className="self-start bg-[#ff4800] text-[#0d0d0d] font-['Geist_Mono',monospace] font-bold text-[12px] tracking-[1px] px-8 py-3.5 rounded-[2px] hover:bg-[#e03e00] disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.97] transition-all shadow-[0_4px_24px_rgba(255,72,0,0.35)] hover:shadow-[0_6px_32px_rgba(255,72,0,0.5)]"
-            >
-              {feedbackState === "sending" ? "SENDING..." : "SEND_FEEDBACK →"}
-            </button>
-          </form>
-        )}
-      </div>
-    </section>
+          <button
+            type="submit"
+            disabled={feedbackState === "sending"}
+            className="self-start bg-[#ff4800] text-[#0d0d0d] font-['Geist_Mono',monospace] font-bold text-[12px] tracking-[1px] px-8 py-3.5 rounded-[2px] hover:bg-[#e03e00] disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.97] transition-all shadow-[0_4px_24px_rgba(255,72,0,0.35)] hover:shadow-[0_6px_32px_rgba(255,72,0,0.5)]"
+          >
+            {feedbackState === "sending" ? "SENDING..." : "SEND_FEEDBACK →"}
+          </button>
+        </form>
+      )}
+    </div>
   );
 }
 
@@ -1495,6 +1634,8 @@ export default function App() {
             </div>
           ))}
         </div>
+
+        <ReviewForm />
       </section>
 
       {modalOpen && <ProjectModal onClose={() => setModalOpen(false)} />}
@@ -1825,8 +1966,6 @@ export default function App() {
         </div>{/* end bordered container + flex row */}
         </div>{/* end px wrapper */}
       </section>
-
-      <FeedbackSection />
 
       {/* Footer */}
       <footer className="theme-border border-t flex flex-col gap-4 px-6 md:px-12 py-6 max-w-[1440px] mx-auto w-full">
