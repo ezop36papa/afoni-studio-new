@@ -1091,11 +1091,9 @@ function VideoHero() {
       className="relative rounded-[2px] overflow-hidden w-full group"
       style={{ height: "clamp(240px, 33vw, 480px)" }}
     >
-      {/* Poster / fallback image — always rendered beneath */}
-      <img
-        src={current.poster}
-        alt=""
-        className="absolute inset-0 w-full h-full object-cover rounded-[2px] pointer-events-none"
+      {/* Neutral background while the video buffers — no stale placeholder photo underneath */}
+      <div
+        className="absolute inset-0 bg-[#0d0d0d] rounded-[2px] pointer-events-none"
         style={{ opacity: transitioning ? 0 : 1, transition: "opacity 0.32s ease" }}
       />
 
@@ -1109,6 +1107,7 @@ function VideoHero() {
     loop
     muted={muted}
     playsInline
+    preload="auto"
     className="absolute inset-0 w-full h-full object-cover rounded-[2px]"
     style={{ opacity: 1 }}
     onError={() => { setHasError(true); setPlaying(false); }}
