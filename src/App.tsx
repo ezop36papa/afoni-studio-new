@@ -29,6 +29,12 @@ const VIDEO_SPORT = [galleryClip("IMG_5396"), galleryClip("IMG_1339"), galleryCl
 const VIDEO_AUTOMOTIVE = [galleryClip("IMG_5939"), galleryClip("IMG_5937"), galleryClip("IMG_5089")];
 const VIDEO_CONCEPT_FILM = [galleryClip("IMG_5938"), galleryClip("IMG_5651")];
 
+// Higher-quality hero stills for the gallery card thumbnails (sourced from the
+// same clips as their category, but a sharper/better-composed frame than the
+// default first-video poster).
+const HERO_LIFESTYLE_BEAUTY = `${BLOB_HOST}/IMG_5050_hero.jpg`;
+const HERO_CONCEPT_FILM = `${BLOB_HOST}/IMG_5938_hero.jpg`;
+
 const assetPathPrefix = "/assets";
 const imgHero = `${assetPathPrefix}/dd176.png`;
 const imgCorner = `${assetPathPrefix}/6de3d.png`;
@@ -1292,10 +1298,10 @@ export default function App() {
           {/* Gallery row 1 */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2 w-full">
             {[
-              { src: VIDEO_LIFESTYLE_BEAUTY[0].poster, code: "[FSHN_001]", index: "[01]", title: "LIFESTYLE /\nBEAUTY", videos: VIDEO_LIFESTYLE_BEAUTY },
-              { src: VIDEO_SPORT[0].poster,            code: "[FSHN_002]", index: "[02]", title: "SPORT",                videos: VIDEO_SPORT },
-              { src: VIDEO_AUTOMOTIVE[0].poster,       code: "[ECOMM_001]", index: "[03]", title: "AUTOMOTIVE",          videos: VIDEO_AUTOMOTIVE },
-              { src: VIDEO_CONCEPT_FILM[0].poster,     code: "[ECOMM_002]", index: "[04]", title: "CONCEPT /\nFILM",     videos: VIDEO_CONCEPT_FILM },
+              { src: HERO_LIFESTYLE_BEAUTY,      code: "[FSHN_001]", index: "[01]", title: "LIFESTYLE /\nBEAUTY", videos: VIDEO_LIFESTYLE_BEAUTY },
+              { src: VIDEO_SPORT[0].poster,      code: "[FSHN_002]", index: "[02]", title: "SPORT",                videos: VIDEO_SPORT },
+              { src: VIDEO_AUTOMOTIVE[0].poster, code: "[ECOMM_001]", index: "[03]", title: "AUTOMOTIVE",          videos: VIDEO_AUTOMOTIVE },
+              { src: HERO_CONCEPT_FILM,          code: "[ECOMM_002]", index: "[04]", title: "CONCEPT /\nFILM",     videos: VIDEO_CONCEPT_FILM },
             ].map(({ src, code, index, title, videos }) => (
               <GalleryCard key={code} src={src} code={code} index={index} title={title} height={280} videos={videos} />
             ))}
