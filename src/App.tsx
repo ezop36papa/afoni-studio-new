@@ -46,16 +46,16 @@ async function submitFeedbackToMakeWebhook(data: { name: string; email: string; 
 const BLOB_HOST = "https://q1pwcp53fg9g9i8k.public.blob.vercel-storage.com";
 const galleryClip = (id: string) => ({ src: `${BLOB_HOST}/${id}.mp4`, poster: `${BLOB_HOST}/${id}.jpg` });
 
-const VIDEO_LIFESTYLE_BEAUTY = [galleryClip("IMG_4538"), galleryClip("IMG_5050")];
+const VIDEO_LIFESTYLE_BEAUTY = [galleryClip("IMG_4538"), galleryClip("IMG_5050"), galleryClip("IMG_5938"), galleryClip("IMG_5651")];
 const VIDEO_SPORT = [galleryClip("IMG_5396"), galleryClip("IMG_1339"), galleryClip("IMG_3913"), galleryClip("IMG_4679"), galleryClip("IMG_5940")];
 const VIDEO_AUTOMOTIVE = [galleryClip("IMG_5939"), galleryClip("IMG_5937"), galleryClip("IMG_5089")];
-const VIDEO_CONCEPT_FILM = [galleryClip("IMG_5938"), galleryClip("IMG_5651")];
+const VIDEO_CONCEPT_FILM = [galleryClip("IMG_1259")];
 
-// Higher-quality hero stills for the gallery card thumbnails (sourced from the
-// same clips as their category, but a sharper/better-composed frame than the
-// default first-video poster).
+// Higher-quality hero still for the LIFESTYLE/BEAUTY card thumbnail (sourced
+// from the same clips as the category, but a sharper/better-composed frame
+// than the default first-video poster). CONCEPT/FILM's own video poster is
+// already a dedicated hand-picked frame, so it needs no separate override.
 const HERO_LIFESTYLE_BEAUTY = `${BLOB_HOST}/IMG_5050_hero.jpg`;
-const HERO_CONCEPT_FILM = `${BLOB_HOST}/IMG_5938_hero.jpg`;
 
 const assetPathPrefix = "/assets";
 const imgHero = `${assetPathPrefix}/dd176.png`;
@@ -1609,10 +1609,10 @@ export default function App() {
           {/* Gallery row 1 */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2 w-full">
             {[
-              { src: HERO_LIFESTYLE_BEAUTY,      code: "[FSHN_001]", index: "[01]", title: "LIFESTYLE /\nBEAUTY", videos: VIDEO_LIFESTYLE_BEAUTY },
-              { src: VIDEO_SPORT[0].poster,      code: "[FSHN_002]", index: "[02]", title: "SPORT",                videos: VIDEO_SPORT },
-              { src: VIDEO_AUTOMOTIVE[0].poster, code: "[ECOMM_001]", index: "[03]", title: "AUTOMOTIVE",          videos: VIDEO_AUTOMOTIVE },
-              { src: HERO_CONCEPT_FILM,          code: "[ECOMM_002]", index: "[04]", title: "CONCEPT /\nFILM",     videos: VIDEO_CONCEPT_FILM },
+              { src: HERO_LIFESTYLE_BEAUTY,        code: "[FSHN_001]", index: "[01]", title: "LIFESTYLE /\nBEAUTY", videos: VIDEO_LIFESTYLE_BEAUTY },
+              { src: VIDEO_SPORT[0].poster,        code: "[FSHN_002]", index: "[02]", title: "SPORT",                videos: VIDEO_SPORT },
+              { src: VIDEO_AUTOMOTIVE[0].poster,   code: "[ECOMM_001]", index: "[03]", title: "AUTOMOTIVE",          videos: VIDEO_AUTOMOTIVE },
+              { src: VIDEO_CONCEPT_FILM[0].poster, code: "[ECOMM_002]", index: "[04]", title: "CONCEPT /\nFILM",     videos: VIDEO_CONCEPT_FILM },
             ].map(({ src, code, index, title, videos }) => (
               <GalleryCard key={code} src={src} code={code} index={index} title={title} height={280} videos={videos} />
             ))}
