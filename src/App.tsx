@@ -1089,11 +1089,11 @@ function VideoHero() {
 
   return (
     <div
-      className="relative rounded-[2px] overflow-hidden w-full group"
+      className="relative rounded-[2px] overflow-hidden self-center group"
       style={
         ratio
-          ? { aspectRatio: `${ratio}`, maxHeight: "75vh" }
-          : { height: "clamp(240px, 33vw, 480px)" }
+          ? { aspectRatio: `${ratio}`, height: "clamp(240px, 42vw, 560px)", maxWidth: "100%" }
+          : { height: "clamp(240px, 33vw, 480px)", width: "100%" }
       }
     >
       {/* Neutral background while the video buffers — no stale placeholder photo underneath */}
@@ -1113,7 +1113,7 @@ function VideoHero() {
     muted={muted}
     playsInline
     preload="auto"
-    className="absolute inset-0 w-full h-full object-contain rounded-[2px]"
+    className="absolute inset-0 w-full h-full object-cover rounded-[2px]"
     style={{ opacity: 1 }}
     onLoadedMetadata={(e) => {
       const v = e.currentTarget;
