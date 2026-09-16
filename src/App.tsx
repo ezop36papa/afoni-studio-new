@@ -1007,6 +1007,7 @@ function VideoHero() {
   const [progress, setProgress] = useState(0);
   const [transitioning, setTransitioning] = useState(false);
   const [hasError, setHasError] = useState(false);
+  const [ratio, setRatio] = useState<number | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const current = VIDEOS[index];
@@ -1089,7 +1090,11 @@ function VideoHero() {
   return (
     <div
       className="relative rounded-[2px] overflow-hidden w-full group"
-      style={{ height: "clamp(240px, 33vw, 480px)" }}
+      style={
+        ratio
+          ? { aspectRatio: `${ratio}`, maxHeight: "75vh" }
+          : { height: "clamp(240px, 33vw, 480px)" }
+      }
     >
       {/* Neutral background while the video buffers — no stale placeholder photo underneath */}
       <div
@@ -1108,8 +1113,12 @@ function VideoHero() {
     muted={muted}
     playsInline
     preload="auto"
-    className="absolute inset-0 w-full h-full object-cover rounded-[2px]"
+    className="absolute inset-0 w-full h-full object-contain rounded-[2px]"
     style={{ opacity: 1 }}
+    onLoadedMetadata={(e) => {
+      const v = e.currentTarget;
+      if (v.videoWidth && v.videoHeight) setRatio(v.videoWidth / v.videoHeight);
+    }}
     onError={() => { setHasError(true); setPlaying(false); }}
   />
 )}
