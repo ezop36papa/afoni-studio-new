@@ -857,6 +857,47 @@ function ReviewForm() {
   );
 }
 
+
+/* ── Review form modal (opened from footer, same pattern as LegalModal) ── */
+function ReviewFormModal({ onClose }: { onClose: () => void }) {
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", onKey);
+    return () => { document.body.style.overflow = ""; window.removeEventListener("keydown", onKey); };
+  }, [onClose]);
+
+  return (
+    <div
+      className="fixed inset-0 z-[300] flex items-center justify-center p-4"
+      style={{ background: "rgba(13,13,13,0.8)", backdropFilter: "blur(6px)" }}
+      onClick={onClose}
+    >
+      <div
+        className="theme-bg w-full max-w-[680px] max-h-[88vh] rounded-[2px] overflow-hidden shadow-[0_24px_80px_rgba(0,0,0,0.5)] flex flex-col"
+        onClick={(e) => e.stopPropagation()}
+        style={{ animation: "modalIn 0.28s cubic-bezier(0.34,1.2,0.64,1)" }}
+      >
+        <div className="bg-[#1a1a1a] px-6 py-4 flex items-center justify-between shrink-0">
+          <div className="flex items-center gap-3">
+            <div className="bg-[#ff4800] w-1 h-4 rounded-full" />
+            <span className="font-['Outfit',sans-serif] font-extrabold text-white text-[16px]">Leave a Review</span>
+          </div>
+          <button
+            onClick={onClose}
+            className="font-['Geist_Mono',monospace] text-white/40 text-[11px] hover:text-[#ff4800] transition-colors tracking-[0.5px]"
+          >
+            [ ESC / CLOSE × ]
+          </button>
+        </div>
+        <div className="overflow-y-auto px-6 py-6 theme-text">
+          <ReviewForm />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ── Parallax tilt hook ── */
 function useParallaxTilt() {
   const ref = useRef<HTMLDivElement>(null);
@@ -1382,6 +1423,7 @@ export default function App() {
   const [formErrors, setFormErrors] = useState<{ name?: string; email?: string; brief?: string }>({});
   const [activeStep, setActiveStep] = useState(0);
   const [legalPage, setLegalPage] = useState<LegalPage>(null);
+  const [showReviewForm, setShowReviewForm] = useState(false);
 
   const refAbout = useRef<HTMLElement>(null);
   const refService = useRef<HTMLElement>(null);
@@ -1672,8 +1714,6 @@ export default function App() {
             </div>
           ))}
         </div>
-
-        <ReviewForm />
       </section>
 
       {modalOpen && <ProjectModal onClose={() => setModalOpen(false)} />}
@@ -2030,6 +2070,7 @@ export default function App() {
           </nav>
         </div>
         {/* German legal links */}
+                  <button onClick={() => setShowReviewForm(true)} className="theme-muted font-['Geist_Mono',monospace] text-[10px] hover:text-[#ff4800] transition-colors tracking-[0.3px]">LEAVE A REVIEW</button>
         <div className="theme-border-s border-t pt-4 flex gap-5 flex-wrap">
           {(["impressum", "datenschutz", "agb"] as const).map((key) => (
             <button
@@ -2044,6 +2085,7 @@ export default function App() {
       </footer>
 
       {legalPage && <LegalModal page={legalPage} onClose={() => setLegalPage(null)} />}
+      {showReviewForm && <ReviewFormModal onClose={() => setShowReviewForm(false)} />}
     </div>
   );
 }
