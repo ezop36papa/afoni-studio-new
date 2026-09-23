@@ -340,15 +340,15 @@ const LEGAL_CONTENT: Record<NonNullable<LegalPage>, { title: string; body: React
       <div className="flex flex-col gap-4 font-['Outfit',sans-serif] text-[14px] leading-[22px]">
         <div>
           <p className="font-bold mb-1">Angaben gemäß § 5 TMG</p>
-          <p>AFONI Studio<br />Musterstraße 12<br />10115 Berlin<br />Deutschland</p>
+          <p>Oleg Afanaszjev<br />AFONI Studio<br />Wilhelmstr. 7<br />10963 Berlin<br />Deutschland</p>
         </div>
         <div>
           <p className="font-bold mb-1">Kontakt</p>
-          <p>E-Mail: hello@afoni.studio<br />Web: www.afoni.studio</p>
+          <p>E-Mail: oleg.afs23@gmail.com<br />Telefon: +49 174 5694712<br />Web: www.afonistudio.com</p>
         </div>
         <div>
           <p className="font-bold mb-1">Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV</p>
-          <p>AFONI Studio, Musterstraße 12, 10115 Berlin</p>
+          <p>Oleg Afanaszjev, Wilhelmstr. 7, 10963 Berlin</p>
         </div>
         <div>
           <p className="font-bold mb-1">Haftungsausschluss</p>
@@ -371,18 +371,22 @@ const LEGAL_CONTENT: Record<NonNullable<LegalPage>, { title: string; body: React
         </div>
         <div>
           <p className="font-bold mb-1">2. Verantwortliche Stelle</p>
-          <p>Verantwortlich für die Datenverarbeitung auf dieser Website ist:<br />AFONI Studio, Musterstraße 12, 10115 Berlin<br />E-Mail: hello@afoni.studio</p>
+          <p>Verantwortlich für die Datenverarbeitung auf dieser Website ist:<br />Oleg Afanaszjev, Wilhelmstr. 7, 10963 Berlin<br />E-Mail: oleg.afs23@gmail.com</p>
         </div>
         <div>
           <p className="font-bold mb-1">3. Datenerfassung auf dieser Website</p>
           <p>Wenn Sie uns per Kontaktformular Anfragen zukommen lassen, werden Ihre Angaben aus dem Anfrageformular inklusive der von Ihnen dort angegebenen Kontaktdaten zwecks Bearbeitung der Anfrage und für den Fall von Anschlussfragen bei uns gespeichert. Diese Daten geben wir nicht ohne Ihre Einwilligung weiter.</p>
         </div>
         <div>
-          <p className="font-bold mb-1">4. Ihre Rechte</p>
+          <p className="font-bold mb-1">4. Eingesetzte Dienste und Weitergabe an Dritte</p>
+          <p>Zur Bearbeitung von Kontakt- und Feedback-Formularen setzen wir die Automatisierungsplattform Make (Celonis s.r.o., EU) ein, die Ihre Angaben entgegennimmt und weiterleitet. Der von Ihnen eingegebene Text wird zusätzlich durch Google Gemini AI (Google Ireland Ltd.) automatisiert ausgewertet, um eine interne Zusammenfassung zu erstellen; diese wird per Telegram (Telegram FZ-LLC) und E-Mail (Google Gmail) an uns übermittelt. Mit diesen Anbietern bestehen, soweit gesetzlich erforderlich, Verträge zur Auftragsverarbeitung. Dabei kann es zu einer Datenübermittlung in Drittländer (u. a. USA) kommen; die Anbieter berufen sich hierfür auf Standardvertragsklauseln der EU-Kommission als geeignete Garantien im Sinne von Art. 46 DSGVO.</p>
+        </div>
+        <div>
+          <p className="font-bold mb-1">5. Ihre Rechte</p>
           <p>Sie haben jederzeit das Recht, unentgeltlich Auskunft über Herkunft, Empfänger und Zweck Ihrer gespeicherten personenbezogenen Daten zu erhalten. Sie haben außerdem ein Recht, die Berichtigung oder Löschung dieser Daten zu verlangen. Hierzu sowie zu weiteren Fragen zum Thema Datenschutz können Sie sich jederzeit unter der im Impressum angegebenen Adresse an uns wenden.</p>
         </div>
         <div>
-          <p className="font-bold mb-1">5. Rechtsgrundlage</p>
+          <p className="font-bold mb-1">6. Rechtsgrundlage</p>
           <p>Die Verarbeitung erfolgt auf Grundlage von Art. 6 Abs. 1 lit. b DSGVO (Vertragserfüllung) und Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse). Sie können der Verarbeitung jederzeit widersprechen.</p>
         </div>
       </div>
