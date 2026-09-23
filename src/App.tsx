@@ -43,7 +43,7 @@ async function submitFeedbackToMakeWebhook(data: { name: string; email: string; 
 
 // Video groups for the "Selected Works" gallery cards — each card cycles
 // through several thematically related clips via the lightbox switcher.
-const BLOB_HOST = "https://q1pwcp53fg9g9i8k.public.blob.vercel-storage.com";
+const BLOB_HOST = "https://pub-b0e56542651e4a2ba6c266de6143610e.r2.dev";
 const galleryClip = (id: string) => ({ src: `${BLOB_HOST}/${id}.mp4`, poster: `${BLOB_HOST}/${id}.jpg` });
 
 const VIDEO_LIFESTYLE_BEAUTY = [galleryClip("IMG_5050"), galleryClip("IMG_4538"), galleryClip("IMG_5938"), galleryClip("IMG_5651")];
