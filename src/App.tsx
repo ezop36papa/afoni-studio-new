@@ -1056,7 +1056,7 @@ function VideoHero() {
   const [transitioning, setTransitioning] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [lightboxOpen, setLightboxOpen] = useState(false);
-  const { ref: tiltRef, style: tiltStyle, onMouseMove, onMouseLeave } = useParallaxTilt();
+  
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const current = VIDEOS[index];
@@ -1139,11 +1139,8 @@ function VideoHero() {
   return (
     <>
     <div
-      ref={tiltRef}
-      onMouseMove={onMouseMove}
-      onMouseLeave={onMouseLeave}
       onClick={() => setLightboxOpen(true)}
-      style={{ ...tiltStyle, height: "clamp(240px, 33vw, 480px)" }}
+      style={{ height: "clamp(240px, 33vw, 480px)" }}
       className="relative rounded-[2px] overflow-hidden w-full group cursor-zoom-in"
     >
       {/* Neutral background while the video buffers — no stale placeholder photo underneath */}
@@ -1540,7 +1537,7 @@ export default function App() {
               </button>
             </div>
             <nav className="flex gap-7 items-center">
-              {(["capabilities", "works", "contact"] as const).map((key) => (
+              {(["capabilities", "contact"] as const).map((key) => (
                 <button
                   key={key}
                   onClick={() => scrollTo(sectionRefs[key])}
@@ -1549,7 +1546,7 @@ export default function App() {
                   onMouseEnter={e => (e.currentTarget.style.color = "#ff4800")}
                   onMouseLeave={e => (e.currentTarget.style.color = "var(--text)")}
                 >
-                  {key === "capabilities" ? "ABOUT US" : key === "works" ? "SERVICE" : "CONTACT"}
+                  {key === "capabilities" ? "ABOUT US" : "CONTACT"}
                 </button>
               ))}
             </nav>
@@ -1570,7 +1567,7 @@ export default function App() {
         {/* Mobile nav drawer */}
         {mobileMenuOpen && (
           <div className="md:hidden theme-bg theme-border-s border-t px-9 py-6 flex flex-col gap-5">
-            {(["capabilities", "works", "contact"] as const).map((key) => (
+            {(["capabilities", "contact"] as const).map((key) => (
               <button
                 key={key}
                 onClick={() => scrollTo(sectionRefs[key])}
@@ -1579,7 +1576,7 @@ export default function App() {
                 onMouseEnter={e => (e.currentTarget.style.color = "#ff4800")}
                 onMouseLeave={e => (e.currentTarget.style.color = "var(--text)")}
               >
-                {key === "capabilities" ? "ABOUT US" : key === "works" ? "SERVICE" : "CONTACT"}
+                {key === "capabilities" ? "ABOUT US" : "CONTACT"}
               </button>
             ))}
           </div>
