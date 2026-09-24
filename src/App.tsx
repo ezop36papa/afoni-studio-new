@@ -1044,8 +1044,8 @@ const VIDEOS = [
   },
 ];
 
-const HERO_VIDEO_SRC = "https://files.catbox.moe/n0sbsd.mp4";
-const HERO_VIDEOS: GalleryVideo[] = [{ src: HERO_VIDEO_SRC, poster: "" }];
+const HERO_VIDEO_SRC = `${assetPathPrefix}/afoni-hero-optimized.mp4`;
+const HERO_VIDEOS: GalleryVideo[] = [{ src: HERO_VIDEO_SRC, poster: `${assetPathPrefix}/afoni-hero-poster.jpg` }];
 
 function VideoHero() {
   const [index, setIndex] = useState(0);
@@ -1159,7 +1159,7 @@ function VideoHero() {
     loop
     muted={muted}
     playsInline
-    preload="auto"
+    preload="auto" poster={`${assetPathPrefix}/afoni-hero-poster.jpg`}
     className="absolute inset-0 w-full h-full object-cover rounded-[2px]"
     style={{ opacity: 1 }}
     onError={() => { setHasError(true); setPlaying(false); }}
