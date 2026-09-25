@@ -1044,7 +1044,7 @@ const VIDEOS = [
   },
 ];
 
-const HERO_VIDEO_SRC = `${assetPathPrefix}/afoni-hero-optimized.mp4`;
+const HERO_VIDEO_SRC = `${assetPathPrefix}/afoni-hero-optimized-v2.mp4`;
 const HERO_VIDEOS: GalleryVideo[] = [{ src: HERO_VIDEO_SRC, poster: `${assetPathPrefix}/afoni-hero-poster.jpg` }];
 
 function VideoHero() {
