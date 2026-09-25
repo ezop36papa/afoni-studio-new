@@ -2071,7 +2071,7 @@ export default function App() {
           </nav>
         </div>
         {/* German legal links */}
-                  <button onClick={() => setShowReviewForm(true)} className="theme-muted font-['Geist_Mono',monospace] text-[10px] hover:text-[#ff4800] transition-colors tracking-[0.3px]">LEAVE A REVIEW</button>
+                  <button onClick={() => setShowReviewForm(true)} className="text-[#ff4800] font-['Geist_Mono',monospace] text-[10px] hover:text-[#ff4800] transition-colors tracking-[0.3px]">LEAVE A REVIEW</button>
         <div className="theme-border-s border-t pt-4 flex gap-5 flex-wrap">
           {(["impressum", "datenschutz", "agb"] as const).map((key) => (
             <button
